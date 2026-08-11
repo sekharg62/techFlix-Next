@@ -6,6 +6,7 @@ import { ThemeContextProvider } from "@/context/ThemeContext";
 import { CartProvider } from "@/context/CartContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,8 +19,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TechFlix",
-  description: "A dark theme application",
+  title: "TechFlix | Premium Digital Subscriptions & Licenses",
+  description: "Get original AI subscriptions, streaming passes, design software, and Microsoft licenses at the best price.",
 };
 
 export default function RootLayout({
@@ -43,6 +44,7 @@ export default function RootLayout({
                 {children}
               </main>
               <Footer />
+              <MobileBottomNav />
             </CartProvider>
           </ThemeContextProvider>
         </NextThemesProvider>
