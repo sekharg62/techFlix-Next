@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-red: #e50914;
+  --color-brand-dark: #000000;
+  --color-brand-darker: #0a0a0a;
+  --color-brand-light: #ffffff;
+  --color-brand-lighter: #f3f4f6;
+}
+
+:root {
+  --background: radial-gradient(circle at top right, #ffe4e6 0%, #ffffff 40%, #f1f5f9 100%);
+  --pattern: radial-gradient(circle, rgba(0, 0, 0, 0.06) 1.5px, transparent 1.5px);
+  --foreground: var(--color-brand-dark);
+  
+  --card-bg: var(--color-brand-light);
+  --card-border: #e5e7eb;
+}
+
+.dark {
+  --background: radial-gradient(circle at top right, #2a0005 0%, #000000 50%, #000000 100%);
+  --pattern: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1.5px, transparent 1.5px);
+  --foreground: var(--color-brand-lighter);
+  
+  --card-bg: var(--color-brand-darker);
+  --card-border: #262626;
+}
+
+body {
+  background: var(--pattern), var(--background);
+  background-size: 24px 24px, 100% 100%;
+  background-attachment: fixed;
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
