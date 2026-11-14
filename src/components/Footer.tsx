@@ -66,7 +66,7 @@ export function Footer() {
           <div>
             <Link href="/" className="flex items-center gap-2 mb-4 hover:opacity-90 transition-opacity">
               <Image src="/images/logo-emblem.png" alt="TechFlix logo" width={41} height={36} className="h-9 w-auto" />
-              <span className="text-xl font-black tracking-tighter text-neutral-900 dark:text-white">
+              <span className="font-display text-xl font-black tracking-tight text-neutral-900 dark:text-white">
                 TECH<span className="text-[var(--color-brand-red)]">FLIX</span>
               </span>
             </Link>
@@ -86,6 +86,7 @@ export function Footer() {
               >
                 <FaFacebook className="w-4 h-4" />
               </a>
+              {siteConfig.instagram && (
               <a
                 href={siteConfig.instagram}
                 target="_blank"
@@ -95,6 +96,7 @@ export function Footer() {
               >
                 <FaInstagram className="w-4 h-4" />
               </a>
+              )}
             </div>
           </div>
 

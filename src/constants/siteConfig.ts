@@ -1,12 +1,12 @@
 export const siteConfig = {
-  phone: "+1 (555) 123-4567",
-  whatsapp: "https://wa.me/15551234567",
-  email: "contact@techflix.com",
-  facebook: "https://facebook.com/techflix",
-  instagram: "https://instagram.com/techflix",
+  phone: "+880 1996-518593",
+  whatsapp: "https://wa.me/8801996518593",
+  email: "techflix.premium2@gmail.com",
+  facebook: "https://www.facebook.com/profile.php?id=61589189276850",
+  instagram: "", // No Instagram page yet: the footer hides the icon while this is empty
 
-  // MFS Payment Numbers Config
-  bkashNumber: "01639441543",
-  nagadNumber: "01639441543",
-  rocketNumber: "01639441543",
+  // MFS Payment Numbers Config (Send Money)
+  bkashNumber: "01996518593",
+  nagadNumber: "01996518593",
+  rocketNumber: "017513114385", // Rocket personal account (12 digits)
 };
