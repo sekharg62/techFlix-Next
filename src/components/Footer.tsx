@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig } from "@/constants/siteConfig";
 import {
   ShieldCheck,
@@ -6,8 +7,7 @@ import {
   Lock,
   Headphones,
   Mail,
-  Phone,
-  PlayCircle
+  Phone
 } from "lucide-react";
 import { FaFacebook, FaInstagram } from "react-icons/fa";
 
@@ -65,7 +65,7 @@ export function Footer() {
           {/* Column 1: Brand Info */}
           <div>
             <Link href="/" className="flex items-center gap-2 mb-4 hover:opacity-90 transition-opacity">
-              <PlayCircle className="w-7 h-7 text-[var(--color-brand-red)]" />
+              <Image src="/images/logo-emblem.png" alt="TechFlix logo" width={41} height={36} className="h-9 w-auto" />
               <span className="text-xl font-black tracking-tighter text-neutral-900 dark:text-white">
                 TECH<span className="text-[var(--color-brand-red)]">FLIX</span>
               </span>

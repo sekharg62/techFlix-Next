@@ -21,6 +21,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "TechFlix | Premium Digital Subscriptions & Licenses",
   description: "Get original AI subscriptions, streaming passes, design software, and Microsoft licenses at the best price.",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

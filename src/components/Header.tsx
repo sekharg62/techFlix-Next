@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { 
-  PlayCircle, 
   ChevronDown, 
   Menu, 
   X, 
@@ -58,7 +58,7 @@ export function Header() {
         
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <PlayCircle className="w-8 h-8 text-[var(--color-brand-red)] animate-pulse" />
+          <Image src="/images/logo-emblem.png" alt="TechFlix logo" width={46} height={40} loading="eager" className="h-10 w-auto" />
           <span className="text-2xl font-black tracking-tighter text-neutral-900 dark:text-white">
             TECH<span className="text-[var(--color-brand-red)]">FLIX</span>
           </span>
