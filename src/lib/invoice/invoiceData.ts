@@ -15,7 +15,7 @@ export interface BillSummary {
 }
 
 export const SELLER = {
-  name: "TechFlix",
+  name: "TECH FLIX",
   tagline: "Premium digital subscriptions",
   email: siteConfig.email,
   phone: siteConfig.phone,

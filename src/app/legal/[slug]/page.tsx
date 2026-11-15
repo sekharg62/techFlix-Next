@@ -33,7 +33,7 @@ const legalDocs: Record<string, LegalContent> = {
   },
   terms: {
     title: "Terms & Conditions",
-    subtitle: "Rules and agreements governing your use of TechFlix services.",
+    subtitle: "Rules and agreements governing your use of TECH FLIX services.",
     icon: FileText,
     updatedAt: "August 2026",
     sections: [

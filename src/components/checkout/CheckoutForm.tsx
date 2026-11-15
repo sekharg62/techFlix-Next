@@ -7,6 +7,7 @@ import { ArrowLeft, Check, Loader2, ShieldCheck, ShoppingBag, Zap, AlertCircle, 
 import { DownloadBillButton } from "@/components/bill/DownloadBillButton";
 import { billHref } from "@/lib/invoice/invoiceData";
 import { siteConfig } from "@/constants/siteConfig";
+import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import { useCart } from "@/context/CartContext";
 import { formatBDT } from "@/lib/format";
 import { orderService, errorMessage, recentOrders } from "@/services/orderService";
@@ -84,6 +85,15 @@ export function CheckoutForm({ paymentMethods }: { paymentMethods: PaymentMethod
 
   if (placed) {
     const trackHref = `/orders?orderNumber=${encodeURIComponent(placed.orderNumber)}&email=${encodeURIComponent(placed.customerEmail)}`;
+    const whatsappText = [
+      "Hello TECH FLIX, I just placed an order.",
+      `Order number: ${placed.orderNumber}`,
+      `Name: ${fullName.trim()}`,
+      `Amount: ${formatBDT(placed.total)}`,
+      `TrxID: ${trxId.trim()}`,
+      `Email: ${placed.customerEmail}`,
+    ].join("\n");
+    const whatsappHref = `${siteConfig.whatsapp}?text=${encodeURIComponent(whatsappText)}`;
     return (
       <main className="w-full max-w-2xl mx-auto px-4 py-16 text-center space-y-6">
         <div className="w-20 h-20 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-500 flex items-center justify-center mx-auto shadow-xl">
@@ -100,6 +110,28 @@ export function CheckoutForm({ paymentMethods }: { paymentMethods: PaymentMethod
           (TrxID <span className="font-mono font-bold">{trxId.trim()}</span>). Your subscription details will be sent to{" "}
           <span className="font-bold text-neutral-900 dark:text-white">{placed.customerEmail}</span>.
         </p>
+        {siteConfig.whatsapp && (
+          <div className="p-5 sm:p-6 rounded-2xl border-2 border-[#25D366] bg-[#25D366]/10 space-y-3">
+            <div className="flex items-center justify-center gap-2 font-black text-lg">
+              <WhatsAppIcon className="w-6 h-6 text-[#25D366]" />
+              Important: message us on WhatsApp
+            </div>
+            <p className="text-sm text-neutral-600 dark:text-neutral-300 max-w-md mx-auto">
+              To confirm your order and get your subscription faster, you <span className="font-bold">must</span> send us a
+              WhatsApp message with your order number. Tap the button below — the message is already filled in for you.
+            </p>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#25D366] hover:bg-[#1ebe5b] text-white font-bold text-sm shadow-lg transition-colors"
+            >
+              <WhatsAppIcon className="w-5 h-5" />
+              Send order on WhatsApp
+            </a>
+            <p className="text-xs text-neutral-500">WhatsApp: {siteConfig.phone}</p>
+          </div>
+        )}
         <div className="p-5 rounded-2xl bg-[var(--card-bg)] border border-[var(--card-border)] space-y-3">
           <div className="flex items-center justify-center gap-2 font-black">
             <FileText className="w-5 h-5 text-[var(--color-brand-red)]" />

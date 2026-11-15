@@ -128,7 +128,7 @@ export function BillDocument({ order }: { order: TrackedOrder }) {
         )}
 
         <footer className="pt-6 border-t border-neutral-200 text-center space-y-1">
-          <p className="font-bold text-sm">Thank you for shopping with TechFlix!</p>
+          <p className="font-bold text-sm">Thank you for shopping with TECH FLIX!</p>
           <p className="text-xs text-neutral-500">
             Questions about this bill? {SELLER.email} · WhatsApp {SELLER.phone}
           </p>

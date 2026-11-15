@@ -25,12 +25,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { productslug } = await params;
   const product = await getProductBySlug(productslug);
-  if (!product) return { title: "Product not found | TechFlix" };
+  if (!product) return { title: "Product not found | TECH FLIX" };
 
   const from = startingPlan(product);
   const description = `${product.smallDesc}${from ? ` From ${formatBDT(from.price)}.` : ""} Pay with bKash, Nagad or Rocket.`;
   return {
-    title: `${product.name} | TechFlix`,
+    title: `${product.name} | TECH FLIX`,
     description,
     alternates: { canonical: `/product/${product.slug}` },
     openGraph: { title: product.name, description, images: [{ url: product.imgUrl }] },

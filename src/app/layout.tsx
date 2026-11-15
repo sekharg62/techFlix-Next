@@ -7,6 +7,7 @@ import { CartProvider } from "@/context/CartContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { getCategories } from "@/lib/data";
 
 const bodyFont = Kanit({
@@ -24,7 +25,7 @@ const monoFont = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
-  title: "TechFlix | Premium Digital Subscriptions & Licenses",
+  title: "TECH FLIX | Premium Digital Subscriptions & Licenses",
   description: "Get original AI subscriptions, streaming passes, design software, and Microsoft licenses at the best price.",
   icons: {
     icon: "/favicon.png",
@@ -58,6 +59,7 @@ export default async function RootLayout({
               </main>
               <Footer />
               <MobileBottomNav />
+              <WhatsAppButton />
             </CartProvider>
           </ThemeContextProvider>
         </NextThemesProvider>

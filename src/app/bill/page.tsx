@@ -3,8 +3,8 @@ import { Suspense } from "react";
 import { BillLookup } from "@/components/bill/BillLookup";
 
 export const metadata: Metadata = {
-  title: "Get your bill | TechFlix",
-  description: "View, print or download the bill for your TechFlix order using your order number.",
+  title: "Get your bill | TECH FLIX",
+  description: "View, print or download the bill for your TECH FLIX order using your order number.",
   robots: { index: false },
 };
 

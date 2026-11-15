@@ -12,7 +12,7 @@ export function WhyChooseUsSection() {
   return (
     <section className="max-w-7xl w-full py-20">
       <div className="text-center mb-12">
-        <h2 className="text-4xl font-black mb-4">Why Choose Solution Zone</h2>
+        <h2 className="text-4xl font-black mb-4">Why Choose TECH FLIX</h2>
         <p className="text-lg text-neutral-600 dark:text-neutral-400">
           We provide the best value and experience for your entertainment needs.
         </p>

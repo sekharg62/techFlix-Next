@@ -65,9 +65,9 @@ export function Footer() {
           {/* Column 1: Brand Info */}
           <div>
             <Link href="/" className="flex items-center gap-2 mb-4 hover:opacity-90 transition-opacity">
-              <Image src="/images/logo-emblem.png" alt="TechFlix logo" width={41} height={36} className="h-9 w-auto" />
+              <Image src="/images/logo-emblem.png" alt="TECH FLIX logo" width={41} height={36} className="h-9 w-auto" />
               <span className="font-display text-xl font-black tracking-tight text-neutral-900 dark:text-white">
-                TECH<span className="text-[var(--color-brand-red)]">FLIX</span>
+                TECH <span className="text-[var(--color-brand-red)]">FLIX</span>
               </span>
             </Link>
             <p className="text-sm font-semibold text-[var(--color-brand-red)] mb-2">
@@ -175,7 +175,7 @@ export function Footer() {
 
         {/* Copyright Footer Line */}
         <div className="w-full text-center text-xs font-semibold text-neutral-500 pt-8 border-t border-[var(--card-border)]">
-          <p>© {new Date().getFullYear()} TechFlix. All rights reserved. Premium Digital Subscriptions & Licenses.</p>
+          <p>© {new Date().getFullYear()} TECH FLIX. All rights reserved. Premium Digital Subscriptions & Licenses.</p>
         </div>
 
       </div>

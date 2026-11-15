@@ -43,9 +43,9 @@ export function Header({ categories }: { categories: CategorySummary[] }) {
         
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <Image src="/images/logo-emblem.png" alt="TechFlix logo" width={46} height={40} loading="eager" className="h-10 w-auto" />
+          <Image src="/images/logo-emblem.png" alt="TECH FLIX logo" width={46} height={40} loading="eager" className="h-10 w-auto" />
           <span className="font-display text-2xl font-black tracking-tight text-neutral-900 dark:text-white">
-            TECH<span className="text-[var(--color-brand-red)]">FLIX</span>
+            TECH <span className="text-[var(--color-brand-red)]">FLIX</span>
           </span>
         </Link>
 
@@ -114,13 +114,13 @@ export function Header({ categories }: { categories: CategorySummary[] }) {
             )}
           </div>
 
-          {/* Help & Support */}
+          {/* Support */}
           <Link 
             href="/support" 
             className="flex items-center gap-1.5 text-neutral-800 dark:text-neutral-100 hover:text-[var(--color-brand-red)] dark:hover:text-[var(--color-brand-red)] transition-colors py-1"
           >
             <HelpCircle className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
-            Help & Support
+            Support
           </Link>
 
           <Link
@@ -233,7 +233,7 @@ export function Header({ categories }: { categories: CategorySummary[] }) {
               className="flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold hover:bg-neutral-100 dark:hover:bg-neutral-900"
             >
               <HelpCircle className="w-5 h-5 text-[var(--color-brand-red)]" />
-              Help & Support
+              Support
             </Link>
             <Link
               href="/orders"

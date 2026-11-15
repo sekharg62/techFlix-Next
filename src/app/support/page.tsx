@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HelpCircle, Mail, MessageSquare, ShieldCheck, ArrowLeft, FileText, PhoneCall } from "lucide-react";
+import { HelpCircle, Mail, ShieldCheck, ArrowLeft, FileText, PhoneCall } from "lucide-react";
 
 export default function SupportPage() {
   return (
@@ -25,14 +25,8 @@ export default function SupportPage() {
       </div>
 
       {/* Support Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         {[
-          {
-            icon: <MessageSquare className="w-6 h-6 text-purple-500" />,
-            title: "Live Chat Support",
-            description: "Chat with our technical support agents for instant activation help.",
-            action: "Start Chat",
-          },
           {
             icon: <Mail className="w-6 h-6 text-red-500" />,
             title: "Email Assistance",

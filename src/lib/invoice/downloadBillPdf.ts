@@ -55,7 +55,7 @@ export async function downloadBillPdf(order: TrackedOrder) {
 
   doc.setProperties({
     title: `Bill ${order.orderNumber}`,
-    subject: "TechFlix order bill",
+    subject: "TECH FLIX order bill",
     author: SELLER.name,
     creator: SELLER.name,
   });
@@ -232,7 +232,7 @@ export async function downloadBillPdf(order: TrackedOrder) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9.5);
   doc.setTextColor(...INK);
-  doc.text("Thank you for shopping with TechFlix!", W / 2, H - 17, { align: "center" });
+  doc.text("Thank you for shopping with TECH FLIX!", W / 2, H - 17, { align: "center" });
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.setTextColor(...MUTED);

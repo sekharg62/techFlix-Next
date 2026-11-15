@@ -5,8 +5,8 @@ import { resolvePaymentMethods } from "@/components/checkout/mfs";
 import { OrderTracker } from "@/components/orders/OrderTracker";
 
 export const metadata: Metadata = {
-  title: "Track your order | TechFlix",
-  description: "Check the status of your TechFlix order with your order number and email.",
+  title: "Track your order | TECH FLIX",
+  description: "Check the status of your TECH FLIX order with your order number and email.",
   robots: { index: false },
 };
 

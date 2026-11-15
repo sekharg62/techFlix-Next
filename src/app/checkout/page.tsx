@@ -4,7 +4,7 @@ import { CheckoutForm } from "@/components/checkout/CheckoutForm";
 import { resolvePaymentMethods } from "@/components/checkout/mfs";
 
 export const metadata: Metadata = {
-  title: "Checkout | TechFlix",
+  title: "Checkout | TECH FLIX",
   robots: { index: false },
 };
 

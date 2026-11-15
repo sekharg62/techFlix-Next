@@ -26,7 +26,7 @@ export async function generateMetadata({ searchParams }: { searchParams: SearchP
   const category = categories.find((c) => c.slug === categorySlug);
   const title = category ? `${category.name} subscriptions` : "All products";
   return {
-    title: `${title} | TechFlix`,
+    title: `${title} | TECH FLIX`,
     description: category
       ? `Buy ${category.name} subscriptions and licenses in Bangladesh. Pay with bKash, Nagad or Rocket.`
       : "Browse premium subscriptions, AI tools, streaming passes and software licenses.",
