@@ -24,6 +24,7 @@ import { siteConfig } from "@/constants/siteConfig";
 import { DownloadBillButton } from "@/components/bill/DownloadBillButton";
 import { billHref } from "@/lib/invoice/invoiceData";
 import { FileText } from "lucide-react";
+import { orderPayoutCharge } from "@/lib/pricing";
 
 const STATUS_META: Record<OrderStatus, { label: string; tone: string }> = {
   PENDING: { label: "Awaiting payment check", tone: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300" },
@@ -292,6 +293,12 @@ function OrderView({
             </li>
           ))}
         </ul>
+        {orderPayoutCharge(order) > 0 && (
+          <div className="flex justify-between pt-4 mt-2 border-t border-[var(--card-border)] text-sm text-neutral-500">
+            <span>Payout charge (2%)</span>
+            <span>{formatBDT(orderPayoutCharge(order))}</span>
+          </div>
+        )}
         <div className="flex justify-between pt-4 mt-2 border-t border-[var(--card-border)] font-black">
           <span>Total</span>
           <span className="text-[var(--color-brand-red)]">{formatBDT(order.total)}</span>

@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { TrackedOrder } from "@/types/catalog";
 import { formatBDT, formatDate } from "@/lib/format";
 import { PAYMENT_NAMES, SELLER, summarizeBill, type BillStatusKey } from "@/lib/invoice/invoiceData";
+import { orderPayoutCharge } from "@/lib/pricing";
 
 const STATUS_STYLE: Record<BillStatusKey, string> = {
   PAID: "bg-green-600 text-white",
@@ -102,6 +103,7 @@ export function BillDocument({ order }: { order: TrackedOrder }) {
           <dl className="w-full sm:w-72 space-y-2 text-sm">
             <Row k="Subtotal" v={formatBDT(order.subtotal)} />
             {order.discount > 0 && <Row k="Discount" v={`− ${formatBDT(order.discount)}`} />}
+            {orderPayoutCharge(order) > 0 && <Row k="Payout charge (2%)" v={formatBDT(orderPayoutCharge(order))} />}
             <Row k="Digital delivery" v="Free" />
             <div className="flex justify-between items-baseline pt-2 border-t border-neutral-200">
               <dt className="font-black">Total</dt>

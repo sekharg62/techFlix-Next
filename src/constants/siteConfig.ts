@@ -1,6 +1,6 @@
 export const siteConfig = {
-  phone: "+880 1996-518593",
-  whatsapp: "https://wa.me/8801996518593",
+  phone: "+880 1806-414229", // Contact + WhatsApp number (payment numbers are below)
+  whatsapp: "https://wa.me/8801806414229",
   email: "techflix.premium@gmail.com",
   facebook: "https://www.facebook.com/profile.php?id=61589189276850",
   instagram: "", // No Instagram page yet: the footer hides the icon while this is empty

@@ -5,9 +5,11 @@ import Image from "next/image";
 import { ArrowLeft, ShoppingBag, Trash2, ArrowRight, ShieldCheck, Zap, Minus, Plus } from "lucide-react";
 import { useCart, MAX_QUANTITY } from "@/context/CartContext";
 import { formatBDT } from "@/lib/format";
+import { priceBreakdown } from "@/lib/pricing";
 
 export default function CartPage() {
   const { items, hydrated, itemCount, subtotal, updateQuantity, removeItem, clearCart } = useCart();
+  const { payoutCharge, total } = priceBreakdown(subtotal);
 
   if (!hydrated) {
     return (
@@ -120,12 +122,16 @@ export default function CartPage() {
                 <span>{formatBDT(subtotal)}</span>
               </div>
               <div className="flex justify-between">
+                <span className="text-neutral-500">Payout charge (2%)</span>
+                <span>{formatBDT(payoutCharge)}</span>
+              </div>
+              <div className="flex justify-between">
                 <span className="text-neutral-500">Digital delivery</span>
                 <span className="text-emerald-500 font-bold">FREE</span>
               </div>
               <div className="flex justify-between text-base font-black border-t border-[var(--card-border)] pt-3">
                 <span>Total</span>
-                <span className="text-[var(--color-brand-red)]">{formatBDT(subtotal)}</span>
+                <span className="text-[var(--color-brand-red)]">{formatBDT(total)}</span>
               </div>
             </div>
             <Link

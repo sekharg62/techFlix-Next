@@ -1,5 +1,6 @@
 import type { TrackedOrder } from "@/types/catalog";
 import { PAYMENT_NAMES, SELLER, billFileName, summarizeBill, type BillStatusKey } from "@/lib/invoice/invoiceData";
+import { orderPayoutCharge } from "@/lib/pricing";
 
 // Built-in PDF fonts have no "৳" glyph, so amounts are written as "BDT 1,197.00"
 const money = (n: number) =>
@@ -185,6 +186,8 @@ export async function downloadBillPdf(order: TrackedOrder) {
   };
   totalRow("Subtotal", money(order.subtotal));
   if (order.discount > 0) totalRow("Discount", `- ${money(order.discount)}`);
+  const payoutCharge = orderPayoutCharge(order);
+  if (payoutCharge > 0) totalRow("Payout charge (2%)", money(payoutCharge));
   totalRow("Digital delivery", "Free");
   doc.setDrawColor(...LINE);
   doc.line(tx, y - 2.5, W - M, y - 2.5);

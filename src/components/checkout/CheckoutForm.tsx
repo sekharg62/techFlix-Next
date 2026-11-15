@@ -10,6 +10,7 @@ import { siteConfig } from "@/constants/siteConfig";
 import { WhatsAppIcon } from "@/components/WhatsAppButton";
 import { useCart } from "@/context/CartContext";
 import { formatBDT } from "@/lib/format";
+import { priceBreakdown } from "@/lib/pricing";
 import { orderService, errorMessage, recentOrders } from "@/services/orderService";
 import type { PaymentMethod, PaymentMethodType, PlacedOrder } from "@/types/catalog";
 import { PaymentPicker, Field, inputCls, PHONE_RE, TRX_RE, EMAIL_RE, cleanPhone } from "@/components/checkout/PaymentPicker";
@@ -18,6 +19,7 @@ type Errors = Partial<Record<"fullName" | "email" | "whatsapp" | "senderNumber" 
 
 export function CheckoutForm({ paymentMethods }: { paymentMethods: PaymentMethod[] }) {
   const { items, hydrated, subtotal, clearCart } = useCart();
+  const { payoutCharge, total } = priceBreakdown(subtotal);
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -229,7 +231,7 @@ export function CheckoutForm({ paymentMethods }: { paymentMethods: PaymentMethod
               onSenderNumberChange={edit("senderNumber", setSenderNumber)}
               trxId={trxId}
               onTrxIdChange={edit("trxId", setTrxId)}
-              amount={subtotal}
+              amount={total}
               errors={errors}
             />
           </section>
@@ -272,12 +274,16 @@ export function CheckoutForm({ paymentMethods }: { paymentMethods: PaymentMethod
                 <span>{formatBDT(subtotal)}</span>
               </div>
               <div className="flex justify-between text-neutral-500 text-xs">
+                <span>Payout charge (2%)</span>
+                <span>{formatBDT(payoutCharge)}</span>
+              </div>
+              <div className="flex justify-between text-neutral-500 text-xs">
                 <span>Digital delivery</span>
                 <span className="text-emerald-500">FREE</span>
               </div>
               <div className="flex justify-between text-lg font-black text-neutral-900 dark:text-white pt-2 border-t border-[var(--card-border)]">
                 <span>Total</span>
-                <span className="text-[var(--color-brand-red)]">{formatBDT(subtotal)}</span>
+                <span className="text-[var(--color-brand-red)]">{formatBDT(total)}</span>
               </div>
             </div>
 
