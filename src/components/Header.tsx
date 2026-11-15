@@ -7,39 +7,24 @@ import {
   ChevronDown, 
   Menu, 
   X, 
-  Bot, 
-  Video, 
-  Palette, 
-  PenTool, 
-  Shield, 
-  Tv, 
-  AppWindow,
   HelpCircle,
+  PackageSearch,
+  FileText,
   Package,
   Home,
   ShoppingBag
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { CATEGORIES } from "@/constants/productsData";
 import { useCart } from "@/context/CartContext";
+import { CategoryIcon } from "@/components/CategoryIcon";
+import type { CategorySummary } from "@/types/catalog";
 
-const categoryIconMap: Record<string, React.ReactNode> = {
-  "ai-tools": <Bot className="w-4 h-4 text-purple-500" />,
-  "video-editing": <Video className="w-4 h-4 text-red-500" />,
-  "design-tools": <Palette className="w-4 h-4 text-pink-500" />,
-  "writing-tools": <PenTool className="w-4 h-4 text-emerald-500" />,
-  "vpn-security": <Shield className="w-4 h-4 text-blue-500" />,
-  "streaming": <Tv className="w-4 h-4 text-amber-500" />,
-  "microsoft": <AppWindow className="w-4 h-4 text-sky-500" />,
-};
-
-export function Header() {
+export function Header({ categories }: { categories: CategorySummary[] }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
-  const cartContext = useCart();
-  const cartItemCount = cartContext?.cart?.length || 0;
+  const { itemCount: cartItemCount } = useCart();
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -53,7 +38,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/90 dark:bg-black/90 border-b border-[var(--card-border)] transition-colors">
+    <header data-print-hide className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/90 dark:bg-black/90 border-b border-[var(--card-border)] transition-colors">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 py-4">
         
         {/* Brand Logo */}
@@ -65,7 +50,7 @@ export function Header() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-bold">
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-bold">
           {/* Home */}
           <Link 
             href="/" 
@@ -106,21 +91,21 @@ export function Header() {
                   Browse Categories
                 </div>
                 <div className="flex flex-col gap-0.5">
-                  {CATEGORIES.map((cat) => (
+                  {categories.map((cat) => (
                     <Link
-                      key={cat.id}
+                      key={cat.slug}
                       href={`/products?category=${cat.slug}`}
                       onClick={() => setIsDropdownOpen(false)}
                       className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors group"
                     >
                       <div className="flex items-center gap-2.5">
-                        {categoryIconMap[cat.slug] || <Package className="w-4 h-4" />}
+                        <CategoryIcon slug={cat.slug} name={cat.name} />
                         <span className="text-sm font-bold text-neutral-800 dark:text-neutral-100 group-hover:text-[var(--color-brand-red)] dark:group-hover:text-[var(--color-brand-red)] transition-colors">
                           {cat.name}
                         </span>
                       </div>
                       <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 group-hover:bg-[var(--color-brand-red)] group-hover:text-white dark:group-hover:text-white transition-colors">
-                        {cat.count}
+                        {cat.totalProducts}
                       </span>
                     </Link>
                   ))}
@@ -136,6 +121,22 @@ export function Header() {
           >
             <HelpCircle className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
             Help & Support
+          </Link>
+
+          <Link
+            href="/orders"
+            className="flex items-center gap-1.5 text-neutral-800 dark:text-neutral-100 hover:text-[var(--color-brand-red)] dark:hover:text-[var(--color-brand-red)] transition-colors py-1"
+          >
+            <PackageSearch className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+            Track Order
+          </Link>
+
+          <Link
+            href="/bill"
+            className="flex items-center gap-1.5 text-neutral-800 dark:text-neutral-100 hover:text-[var(--color-brand-red)] dark:hover:text-[var(--color-brand-red)] transition-colors py-1"
+          >
+            <FileText className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+            Get Bill
           </Link>
         </nav>
 
@@ -160,7 +161,7 @@ export function Header() {
           {/* Mobile Menu Hamburger Toggle */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2.5 rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] text-neutral-800 dark:text-neutral-100 hover:opacity-80 transition-opacity"
+            className="lg:hidden p-2.5 rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] text-neutral-800 dark:text-neutral-100 hover:opacity-80 transition-opacity"
             aria-label="Toggle mobile menu"
           >
             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -170,7 +171,7 @@ export function Header() {
 
       {/* Mobile Drawer Navigation */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-neutral-950 border-b border-[var(--card-border)] px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-200 text-neutral-900 dark:text-neutral-100">
+        <div className="lg:hidden bg-white dark:bg-neutral-950 border-b border-[var(--card-border)] px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top-2 duration-200 text-neutral-900 dark:text-neutral-100">
           <Link
             href="/"
             onClick={() => setIsMobileMenuOpen(false)}
@@ -211,14 +212,14 @@ export function Header() {
               Categories
             </div>
             <div className="grid grid-cols-2 gap-2 pt-1">
-              {CATEGORIES.map((cat) => (
+              {categories.map((cat) => (
                 <Link
-                  key={cat.id}
+                  key={cat.slug}
                   href={`/products?category=${cat.slug}`}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="flex items-center gap-2 p-2.5 rounded-xl bg-neutral-50 dark:bg-neutral-900 text-xs font-bold text-neutral-800 dark:text-neutral-100 hover:border-[var(--color-brand-red)] border border-transparent transition-all"
                 >
-                  {categoryIconMap[cat.slug]}
+                  <CategoryIcon slug={cat.slug} name={cat.name} />
                   <span className="truncate">{cat.name}</span>
                 </Link>
               ))}
@@ -233,6 +234,22 @@ export function Header() {
             >
               <HelpCircle className="w-5 h-5 text-[var(--color-brand-red)]" />
               Help & Support
+            </Link>
+            <Link
+              href="/orders"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold hover:bg-neutral-100 dark:hover:bg-neutral-900"
+            >
+              <PackageSearch className="w-5 h-5 text-[var(--color-brand-red)]" />
+              Track Order
+            </Link>
+            <Link
+              href="/bill"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl font-bold hover:bg-neutral-100 dark:hover:bg-neutral-900"
+            >
+              <FileText className="w-5 h-5 text-[var(--color-brand-red)]" />
+              Get Bill
             </Link>
           </div>
         </div>

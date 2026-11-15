@@ -7,6 +7,7 @@ import { CartProvider } from "@/context/CartContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
+import { getCategories } from "@/lib/data";
 
 const bodyFont = Kanit({
   variable: "--font-body",
@@ -22,6 +23,7 @@ const monoFont = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
   title: "TechFlix | Premium Digital Subscriptions & Licenses",
   description: "Get original AI subscriptions, streaming passes, design software, and Microsoft licenses at the best price.",
   icons: {
@@ -31,11 +33,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Cached (1 h / until admin changes) and shared with pages that also need categories
+  const categories = await getCategories();
+
   return (
     <html lang="en" suppressHydrationWarning className={`${bodyFont.variable} ${monoFont.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col transition-colors duration-300">
@@ -47,7 +52,7 @@ export default function RootLayout({
         >
           <ThemeContextProvider>
             <CartProvider>
-              <Header />
+              <Header categories={categories} />
               <main className="flex-1 w-full flex flex-col items-center">
                 {children}
               </main>

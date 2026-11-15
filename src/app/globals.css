@@ -59,3 +59,23 @@ h1, h2, h3, h4, h5, h6 {
   animation-play-state: paused;
 }
 
+
+/* Printing a bill: only the bill sheet, on white paper */
+@media print {
+  [data-print-hide] {
+    display: none !important;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  .bill-sheet {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

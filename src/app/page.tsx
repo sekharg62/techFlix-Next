@@ -4,73 +4,47 @@ import { ProductSection } from "@/components/ProductSection";
 import { WhyChooseUsSection } from "@/components/WhyChooseUsSection";
 import { ReviewsSection } from "@/components/ReviewsSection";
 import { FaqSection } from "@/components/FaqSection";
-import { ALL_PRODUCTS } from "@/constants/productsData";
+import { getCategories, getHeroSlides, getHomeSections, getProducts, getReviews } from "@/lib/data";
 
-export default function Home() {
-  // Filter product subsets for multiple reusable sections
-  const popularProducts = ALL_PRODUCTS.filter((p) => p.popular || p.badge === "🔥 HOT");
-  const aiAndVideoProducts = ALL_PRODUCTS.filter(
-    (p) => p.category === "AI Tools" || p.category === "Video Editing"
-  );
-  const vpnAndSecurityProducts = ALL_PRODUCTS.filter(
-    (p) => p.category === "VPN & Security" || p.category === "Writing Tools"
-  );
-  const microsoftProducts = ALL_PRODUCTS.filter(
-    (p) => p.category === "Microsoft" || p.category === "Design Tools"
-  );
+// Static page, refreshed in the background at most every 30 min
+// (admin changes revalidate it immediately via /api/revalidate).
+export const revalidate = 1800;
+
+export default async function Home() {
+  // All requests run in parallel and are served from the Data Cache
+  const [slides, categories, sections, reviews] = await Promise.all([
+    getHeroSlides(),
+    getCategories(),
+    getHomeSections(),
+    getReviews(),
+  ]);
+
+  // No sections configured yet → show the newest products so the page is never empty
+  const fallback = sections.length === 0 ? (await getProducts({ limit: 10 })).products : [];
 
   return (
     <div className="w-full flex flex-col items-center justify-center pb-12">
-      
-      {/* 1. Hero Carousel Section (4-5 Carousel Items, Mobile & Desktop Responsive) */}
-      <HeroCarousel />
+      <HeroCarousel slides={slides} />
+      <CategoryBar categories={categories} />
 
-      {/* 2. Browse by Category Bar (One-line scrollable bar on Mobile & Desktop) */}
-      <CategoryBar />
+      {sections.map((section, index) => (
+        <ProductSection
+          key={section.id}
+          badgeText={section.tag}
+          title={section.title}
+          subtitle={section.desc}
+          products={section.products}
+          viewAllLink="/products"
+          priority={index === 0 && slides.length === 0}
+        />
+      ))}
 
-      {/* 3. Reusable Product Section 1: 🔥 POPULAR */}
-      <ProductSection
-        badgeEmoji="🔥"
-        badgeText="POPULAR"
-        title="Popular Products"
-        subtitle="Our highest-rated software keys and premium subscriptions this month."
-        products={popularProducts.length >= 4 ? popularProducts : ALL_PRODUCTS.slice(0, 5)}
-        viewAllLink="/products"
-      />
+      {fallback.length > 0 && (
+        <ProductSection badgeText="NEW" title="Latest Products" products={fallback} viewAllLink="/products" />
+      )}
 
-      {/* 4. Reusable Product Section 2: ⚡ TRENDING AI & VIDEO TOOLS */}
-      <ProductSection
-        badgeEmoji="⚡"
-        badgeText="TRENDING"
-        title="AI & Video Editing Tools"
-        subtitle="Supercharge your workflow with cutting-edge artificial intelligence and rendering software."
-        products={aiAndVideoProducts}
-        viewAllLink="/products?category=ai-tools"
-      />
-
-      {/* 5. Reusable Product Section 3: 🛡️ SECURITY & PRIVACY */}
-      <ProductSection
-        badgeEmoji="🛡️"
-        badgeText="SECURITY & PRIVACY"
-        title="VPN & Security Essentials"
-        subtitle="Protect your identity, bypass geo-restrictions, and encrypt your digital footprint."
-        products={vpnAndSecurityProducts}
-        viewAllLink="/products?category=vpn-security"
-      />
-
-      {/* 6. Reusable Product Section 4: 💻 MICROSOFT & DESIGN */}
-      <ProductSection
-        badgeEmoji="💻"
-        badgeText="OFFICE & DESIGN"
-        title="Microsoft & Design Tools"
-        subtitle="Official Windows, Office 365, Canva, and Adobe Creative suites at discounted rates."
-        products={microsoftProducts}
-        viewAllLink="/products?category=microsoft"
-      />
-
-      {/* Additional Trust & Social Proof Sections */}
       <WhyChooseUsSection />
-      <ReviewsSection />
+      <ReviewsSection reviews={reviews} />
       <FaqSection />
     </div>
   );

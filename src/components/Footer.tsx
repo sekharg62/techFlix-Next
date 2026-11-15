@@ -13,7 +13,7 @@ import { FaFacebook, FaInstagram } from "react-icons/fa";
 
 export function Footer() {
   return (
-    <footer className="w-full bg-[var(--card-bg)] border-t border-[var(--card-border)] pt-12 pb-24 md:pb-12 mt-auto text-neutral-800 dark:text-neutral-200">
+    <footer data-print-hide className="w-full bg-[var(--card-bg)] border-t border-[var(--card-border)] pt-12 pb-24 md:pb-12 mt-auto text-neutral-800 dark:text-neutral-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
         {/* 4 Value Proposition Highlights Bar */}
@@ -151,6 +151,12 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/support" className="hover:text-[var(--color-brand-red)] transition-colors">Contact Support</Link>
+              </li>
+              <li>
+                <Link href="/orders" className="hover:text-[var(--color-brand-red)] transition-colors">Track Order</Link>
+              </li>
+              <li>
+                <Link href="/bill" className="hover:text-[var(--color-brand-red)] transition-colors">Get Bill</Link>
               </li>
             </ul>
             <div className="p-3.5 rounded-xl bg-neutral-100 dark:bg-neutral-900 border border-[var(--card-border)] space-y-2 text-xs">

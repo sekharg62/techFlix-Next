@@ -1,104 +1,112 @@
-"use client";
-
-import { useState, use } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { notFound, useRouter } from "next/navigation";
-import { 
-  ChevronRight, 
-  Star, 
-  Minus, 
-  Plus, 
-  ShoppingBag, 
-  Zap, 
-  ShieldCheck, 
-  Check, 
-  Clock, 
-  ArrowLeft 
-} from "lucide-react";
-import { ALL_PRODUCTS } from "@/constants/productsData";
-import { useCart } from "@/context/CartContext";
+import { notFound } from "next/navigation";
+import { ChevronRight, Check, ShieldCheck, Clock } from "lucide-react";
+import { getProductBySlug, getProductSlugsForPrerender, getRelatedProducts } from "@/lib/data";
+import { formatBDT, isAvailable, startingPlan } from "@/lib/format";
+import { PurchasePanel } from "@/components/product/PurchasePanel";
+import { ProductSection } from "@/components/ProductSection";
 
-export default function ProductDetailPage({ params }: { params: Promise<{ productslug: string }> }) {
-  const { productslug } = use(params);
-  const router = useRouter();
-  const cartContext = useCart();
-  const addToCart = cartContext?.addToCart || (() => {});
+type Params = Promise<{ productslug: string }>;
 
-  const [quantity, setQuantity] = useState(1);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
+// ISR: prerender popular products at build, render others on first visit, refresh every 30 min
+export const revalidate = 1800;
+export const dynamicParams = true;
 
-  // Find product by slug or id
-  const product = ALL_PRODUCTS.find(
-    (p) => p.slug === productslug || p.id === productslug
-  );
-
-  if (!product) {
-    notFound();
+export async function generateStaticParams() {
+  try {
+    return (await getProductSlugsForPrerender(50)).map((productslug) => ({ productslug }));
+  } catch {
+    return []; // backend unavailable at build time → render on demand
   }
+}
 
-  const handleAddToCart = () => {
-    addToCart({ ...product, quantity });
-    setToastMessage(`${product.name} * ${quantity} added to cart!`);
-    setTimeout(() => {
-      setToastMessage(null);
-    }, 3500);
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const { productslug } = await params;
+  const product = await getProductBySlug(productslug);
+  if (!product) return { title: "Product not found | TechFlix" };
+
+  const from = startingPlan(product);
+  const description = `${product.smallDesc}${from ? ` From ${formatBDT(from.price)}.` : ""} Pay with bKash, Nagad or Rocket.`;
+  return {
+    title: `${product.name} | TechFlix`,
+    description,
+    alternates: { canonical: `/product/${product.slug}` },
+    openGraph: { title: product.name, description, images: [{ url: product.imgUrl }] },
   };
+}
 
-  const handleBuyNow = () => {
-    addToCart({ ...product, quantity });
-    router.push("/checkout");
+export default async function ProductDetailPage({ params }: { params: Params }) {
+  const { productslug } = await params;
+  const product = await getProductBySlug(productslug);
+  if (!product) notFound();
+
+  const related = await getRelatedProducts(product, 5);
+  const available = isAvailable(product);
+  const features = Array.isArray(product.features) ? product.features.filter((f) => typeof f === "string") : [];
+
+  // Structured data for rich search results
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.smallDesc,
+    image: product.imgUrl,
+    category: product.category?.name,
+    offers: product.plans.map((plan) => ({
+      "@type": "Offer",
+      name: plan.name,
+      price: plan.price,
+      priceCurrency: "BDT",
+      availability: product.stock && plan.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+    })),
   };
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-8">
-      
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed top-20 right-4 z-50 bg-emerald-600 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-top-4 duration-200">
-          <Check className="w-5 h-5 bg-white/20 rounded-full p-0.5" />
-          <span className="text-sm font-bold">{toastMessage}</span>
-        </div>
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
 
-      {/* Breadcrumb Navigation: Home > Product > Name of product */}
-      <nav className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-neutral-500 mb-8 overflow-x-auto pb-1">
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-neutral-500 mb-8 overflow-x-auto pb-1">
         <Link href="/" className="hover:text-[var(--color-brand-red)] transition-colors whitespace-nowrap">
           Home
         </Link>
         <ChevronRight className="w-4 h-4 text-neutral-400 shrink-0" />
-        <Link href="/products" className="hover:text-[var(--color-brand-red)] transition-colors whitespace-nowrap">
-          Product
-        </Link>
+        {product.category ? (
+          <Link
+            href={`/products?category=${product.category.slug}`}
+            className="hover:text-[var(--color-brand-red)] transition-colors whitespace-nowrap"
+          >
+            {product.category.name}
+          </Link>
+        ) : (
+          <Link href="/products" className="hover:text-[var(--color-brand-red)] transition-colors whitespace-nowrap">
+            Products
+          </Link>
+        )}
         <ChevronRight className="w-4 h-4 text-neutral-400 shrink-0" />
-        <span className="text-neutral-900 dark:text-neutral-100 font-bold truncate max-w-xs sm:max-w-md">
+        <span aria-current="page" className="text-neutral-900 dark:text-neutral-100 font-bold truncate max-w-xs sm:max-w-md">
           {product.name}
         </span>
       </nav>
 
-      {/* Product Details Section: Image Left, Info Right */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14">
-        
-        {/* Left Side: Product Image Showcase */}
-        <div className="space-y-4">
-          <div className="relative w-full h-[380px] sm:h-[480px] rounded-3xl overflow-hidden bg-neutral-950 border border-[var(--card-border)] shadow-xl">
+      {/* Mobile order: image → plans → features. Desktop: image + features left, plans right. */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-x-14 gap-y-8 lg:items-start">
+        <div className="lg:col-start-1 lg:row-start-1">
+          <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-neutral-950 border border-[var(--card-border)] shadow-xl">
             <Image
-              src={product.image}
+              src={product.imgUrl}
               alt={product.name}
               fill
               priority
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
-
-            {product.badge && (
-              <div className="absolute top-4 left-4 px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[var(--color-brand-red)] text-white shadow-lg">
-                {product.badge}
-              </div>
-            )}
-
-            {!product.inStock && (
-              <div className="absolute inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center">
+            {!available && (
+              <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
                 <span className="px-6 py-2.5 rounded-full bg-red-600 text-white font-black text-lg tracking-wider shadow-2xl">
                   OUT OF STOCK
                 </span>
@@ -107,141 +115,68 @@ export default function ProductDetailPage({ params }: { params: Promise<{ produc
           </div>
         </div>
 
-        {/* Right Side: Details & Actions */}
-        <div className="flex flex-col justify-between space-y-6">
-          <div className="space-y-4">
-            
-            {/* Stock Status Tag & Rating */}
-            <div className="flex items-center justify-between">
-              {product.inStock ? (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  In Stock (Instant Digital Access)
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-red-100 dark:bg-red-950/80 text-red-600 dark:text-red-400">
-                  <span className="w-2 h-2 rounded-full bg-red-500" />
-                  Currently Out of Stock
-                </span>
-              )}
-
-              <div className="flex items-center gap-1.5 bg-neutral-100 dark:bg-neutral-800/80 px-3 py-1 rounded-full text-xs font-bold">
-                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                <span>{product.rating.toFixed(1)} / 5.0 Rating</span>
-              </div>
+        {features.length > 0 && (
+          <div className="order-last lg:order-none lg:col-start-1 lg:row-start-2">
+            <div className="p-5 rounded-2xl bg-[var(--card-bg)] border border-[var(--card-border)]">
+              <h2 className="text-sm font-black uppercase tracking-wider text-neutral-500 mb-3">What you get</h2>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2 text-sm font-medium">
+                    <Check className="w-4 h-4 mt-0.5 text-emerald-500 shrink-0" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
             </div>
+          </div>
+        )}
 
-            {/* Product Name */}
+        <div className="space-y-6 lg:col-start-2 lg:row-start-1 lg:row-span-2">
+          <div className="space-y-3">
+            {product.category && (
+              <Link
+                href={`/products?category=${product.category.slug}`}
+                className="inline-block px-3 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-bold text-[var(--color-brand-red)]"
+              >
+                {product.category.name}
+              </Link>
+            )}
             <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-neutral-900 dark:text-white leading-tight">
               {product.name}
             </h1>
-
-            {/* Category Tag */}
-            <div className="inline-block px-3 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-bold text-[var(--color-brand-red)]">
-              Category: {product.category}
-            </div>
-
-            {/* Tagline & Full Description */}
-            <p className="text-base text-neutral-600 dark:text-neutral-300 leading-relaxed pt-1">
-              {product.description}
-            </p>
-
-            {/* Price Box */}
-            <div className="p-4 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-[var(--card-border)] flex items-baseline justify-between">
-              <div>
-                <span className="text-xs text-neutral-400 block mb-0.5">Special Deal Price</span>
-                <div className="flex items-baseline gap-3">
-                  <span className="text-3xl font-black text-[var(--color-brand-red)]">
-                    {product.priceBDT || product.price}
-                  </span>
-                  {product.originalPriceBDT && (
-                    <span className="text-sm font-bold text-neutral-400 line-through">
-                      {product.originalPriceBDT}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <span className="text-xs font-bold text-emerald-600 bg-emerald-100 dark:bg-emerald-950 px-2.5 py-1 rounded-md">
-                Official License
-              </span>
-            </div>
-
-            {/* Quantity Selector */}
-            {product.inStock && (
-              <div className="space-y-2 pt-2">
-                <label className="text-xs font-bold text-neutral-500 uppercase tracking-wider block">
-                  Select Quantity:
-                </label>
-                <div className="inline-flex items-center rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg)] p-1">
-                  <button
-                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                    className="p-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-                    aria-label="Decrease quantity"
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  <span className="w-12 text-center font-extrabold text-base">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => setQuantity((q) => q + 1)}
-                    className="p-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-                    aria-label="Increase quantity"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Action Buttons: Add to Cart & Buy Now */}
-            {product.inStock ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                {/* Add to Cart Button */}
-                <button
-                  onClick={handleAddToCart}
-                  className="py-4 px-6 rounded-2xl border-2 border-[var(--color-brand-red)] text-[var(--color-brand-red)] hover:bg-[var(--color-brand-red)] hover:text-white font-extrabold text-base transition-all duration-200 shadow-md flex items-center justify-center gap-2 active:scale-95"
-                >
-                  <ShoppingBag className="w-5 h-5" />
-                  Add to Cart
-                </button>
-
-                {/* Buy Now Button */}
-                <button
-                  onClick={handleBuyNow}
-                  className="py-4 px-6 rounded-2xl bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-extrabold text-base transition-all duration-200 shadow-xl flex items-center justify-center gap-2 active:scale-95"
-                >
-                  <Zap className="w-5 h-5 fill-white" />
-                  Buy Now
-                </button>
-              </div>
-            ) : (
-              <div className="pt-4">
-                <button
-                  disabled
-                  className="w-full py-4 rounded-2xl bg-neutral-200 dark:bg-neutral-800 text-neutral-500 font-extrabold text-base cursor-not-allowed"
-                >
-                  Product Currently Unavailable
-                </button>
-              </div>
-            )}
-
-            {/* Guarantees Box */}
-            <div className="grid grid-cols-2 gap-3 pt-4 text-xs font-semibold text-neutral-500 border-t border-[var(--card-border)]">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                <span>100% Genuine Digital Pass</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-amber-500" />
-                <span>Instant Delivery to Email</span>
-              </div>
-            </div>
-
+            <p className="text-base text-neutral-600 dark:text-neutral-300 leading-relaxed">{product.smallDesc}</p>
           </div>
-        </div>
 
+          <PurchasePanel product={product} />
+
+          <div className="grid grid-cols-2 gap-3 pt-4 text-xs font-semibold text-neutral-500 border-t border-[var(--card-border)]">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-500" />
+              <span>100% genuine subscription</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-amber-500" />
+              <span>Delivered after payment check</span>
+            </div>
+          </div>
+
+          {product.longDesc && (
+            <div className="pt-2">
+              <h2 className="text-lg font-black mb-2">About {product.name}</h2>
+              <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed whitespace-pre-line">{product.longDesc}</p>
+            </div>
+          )}
+        </div>
       </div>
+
+      {related.length > 0 && (
+        <ProductSection
+          badgeText="MORE LIKE THIS"
+          title={`More in ${product.category?.name ?? "this category"}`}
+          products={related}
+          viewAllLink={product.category ? `/products?category=${product.category.slug}` : "/products"}
+        />
+      )}
     </main>
   );
 }
