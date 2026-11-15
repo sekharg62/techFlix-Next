@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { ArrowLeft, ShieldCheck, FileText, RefreshCw, Award } from "lucide-react";
-import { notFound } from "next/navigation";
+import { ArrowLeft, ShieldCheck, FileText } from "lucide-react";
+import { notFound, permanentRedirect } from "next/navigation";
 
 interface LegalContent {
   title: string;
@@ -47,35 +47,27 @@ const legalDocs: Record<string, LegalContent> = {
       },
     ],
   },
-  refund: {
-    title: "Refund Policy",
-    subtitle: "Guaranteed satisfaction and 100% money-back terms.",
-    icon: RefreshCw,
-    updatedAt: "August 2026",
-    sections: [
-      {
-        heading: "1. 14-Day Money Back Guarantee",
-        content: "If an activation key or subscription fail to work as specified, and our technical support cannot resolve it, you will receive a 100% instant refund.",
-      },
-      {
-        heading: "2. Replacement Guarantee",
-        content: "We offer instant key replacement within 24 hours of notification if any activation issue arises.",
-      },
-    ],
-  },
-  warranty: {
-    title: "Warranty Policy",
-    subtitle: "Coverage and lifetime product replacement assurances.",
-    icon: Award,
-    updatedAt: "August 2026",
+  "warranty-refund": {
+    title: "Warranty & Refund Policy",
+    subtitle: "Full-duration warranty, free replacement and money-back terms.",
+    icon: ShieldCheck,
+    updatedAt: "November 2026",
     sections: [
       {
         heading: "1. Warranty Period",
-        content: "All digital keys come with a full duration warranty matching the subscription period (e.g. 1-Month, 1-Year, or Lifetime).",
+        content: "All digital keys and subscriptions come with a full-duration warranty matching the plan you bought (e.g. 1 month, 3 months, 12 months or lifetime).",
       },
       {
-        heading: "2. Official Support",
-        content: "If your subscription experiences downtime, our dedicated support team will replace your key within 1-2 hours.",
+        heading: "2. Replacement Guarantee",
+        content: "If your subscription stops working or experiences downtime, contact our support team. We replace the key or account, usually within 1–2 hours and always within 24 hours of your report.",
+      },
+      {
+        heading: "3. 14-Day Money-Back Guarantee",
+        content: "If an activation key or subscription fails to work as specified and our technical support cannot resolve it or replace it, you will receive a 100% refund.",
+      },
+      {
+        heading: "4. How to Claim",
+        content: "Message us on WhatsApp or email with your order number and a short description (or screenshot) of the problem. Claims are handled by our support team in the order they arrive.",
       },
     ],
   },
@@ -83,6 +75,8 @@ const legalDocs: Record<string, LegalContent> = {
 
 export default async function LegalPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  // Warranty and refund used to be two pages; keep old links working.
+  if (slug === "refund" || slug === "warranty") permanentRedirect("/legal/warranty-refund");
   const doc = legalDocs[slug];
 
   if (!doc) {

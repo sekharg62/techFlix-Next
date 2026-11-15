@@ -134,10 +134,7 @@ export function Footer() {
                 <Link href="/legal/terms" className="hover:text-[var(--color-brand-red)] transition-colors">Terms & Conditions</Link>
               </li>
               <li>
-                <Link href="/legal/refund" className="hover:text-[var(--color-brand-red)] transition-colors">Refund Policy</Link>
-              </li>
-              <li>
-                <Link href="/legal/warranty" className="hover:text-[var(--color-brand-red)] transition-colors">Warranty Policy</Link>
+                <Link href="/legal/warranty-refund" className="hover:text-[var(--color-brand-red)] transition-colors">Warranty & Refund Policy</Link>
               </li>
             </ul>
           </div>
