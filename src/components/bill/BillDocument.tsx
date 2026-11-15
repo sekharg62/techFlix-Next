@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { TrackedOrder } from "@/types/catalog";
-import { formatBDT, formatDate } from "@/lib/format";
+import { formatBDT, formatDate, itemPlanLabel } from "@/lib/format";
 import { PAYMENT_NAMES, SELLER, summarizeBill, type BillStatusKey } from "@/lib/invoice/invoiceData";
 import { orderPayoutCharge } from "@/lib/pricing";
 
@@ -86,7 +86,7 @@ export function BillDocument({ order }: { order: TrackedOrder }) {
                   <td className="py-3 px-3">
                     <div className="font-bold">{item.productName}</div>
                     <div className="text-xs text-neutral-500">
-                      {item.planName}
+                      {itemPlanLabel(item)}
                       {item.planValidity ? ` · ${item.planValidity}` : ""}
                     </div>
                   </td>

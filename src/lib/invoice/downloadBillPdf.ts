@@ -1,6 +1,7 @@
 import type { TrackedOrder } from "@/types/catalog";
 import { PAYMENT_NAMES, SELLER, billFileName, summarizeBill, type BillStatusKey } from "@/lib/invoice/invoiceData";
 import { orderPayoutCharge } from "@/lib/pricing";
+import { itemPlanLabel } from "@/lib/format";
 
 // Built-in PDF fonts have no "৳" glyph, so amounts are written as "BDT 1,197.00"
 const money = (n: number) =>
@@ -146,7 +147,7 @@ export async function downloadBillPdf(order: TrackedOrder) {
     head: [["#", "Item", "Qty", "Unit price", "Amount"]],
     body: order.items.map((item, i) => [
       String(i + 1),
-      `${item.productName}\n${item.planName}${item.planValidity ? ` · ${item.planValidity}` : ""}`,
+      `${item.productName}\n${itemPlanLabel(item)}${item.planValidity ? ` · ${item.planValidity}` : ""}`,
       String(item.quantity),
       money(item.unitPrice),
       money(item.lineTotal),

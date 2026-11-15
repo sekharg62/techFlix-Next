@@ -5,8 +5,17 @@ const bdt = new Intl.NumberFormat("en-BD", { maximumFractionDigits: 2 });
 export const formatBDT = (value: number | null | undefined) => `৳${bdt.format(Number(value || 0))}`;
 
 /** Plans the customer can buy right now, in display order. */
-export const buyablePlans = (product: Product): Plan[] =>
-  product.stock ? product.plans.filter((p) => p.inStock).sort((a, b) => a.sortOrder - b.sortOrder) : [];
+export const buyablePlans = (product: Product): Plan[] => {
+  if (!product.stock) return [];
+  const variantOut = new Set((product.variants ?? []).filter((v) => !v.inStock).map((v) => v.id));
+  return product.plans
+    .filter((p) => p.inStock && !(p.variantId && variantOut.has(p.variantId)))
+    .sort((a, b) => a.sortOrder - b.sortOrder);
+};
+
+/** "Mobile · 3 Months" for items bought from a variant, otherwise just the plan name. */
+export const itemPlanLabel = (item: { variantName?: string | null; planName: string }) =>
+  item.variantName ? `${item.variantName} · ${item.planName}` : item.planName;
 
 /** Cheapest buyable plan (falls back to any plan for out-of-stock products). */
 export const startingPlan = (product: Product): Plan | null => {

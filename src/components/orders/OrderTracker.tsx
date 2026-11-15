@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { orderService, errorMessage, recentOrders } from "@/services/orderService";
 import type { OrderStatus, PaymentMethod, PaymentMethodType, TrackedOrder } from "@/types/catalog";
-import { formatBDT, formatDate, formatDateTime } from "@/lib/format";
+import { formatBDT, formatDate, formatDateTime, itemPlanLabel } from "@/lib/format";
 import { MFS_STYLE } from "@/components/checkout/mfs";
 import { PaymentPicker, Field, inputCls, PHONE_RE, TRX_RE, EMAIL_RE, cleanPhone } from "@/components/checkout/PaymentPicker";
 import { siteConfig } from "@/constants/siteConfig";
@@ -285,7 +285,7 @@ function OrderView({
                   {item.productName}
                 </Link>
                 <div className="text-xs text-neutral-500">
-                  {item.planName} × {item.quantity}
+                  {itemPlanLabel(item)} × {item.quantity}
                   {item.deliveredAt ? " · Delivered" : ""}
                 </div>
               </div>

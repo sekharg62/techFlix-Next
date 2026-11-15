@@ -8,6 +8,18 @@ export interface Plan {
   validity: string | null;
   inStock: boolean;
   sortOrder: number;
+  /** Variant this plan belongs to (null/absent = simple plan). */
+  variantId?: string | null;
+}
+
+/** A group of plans inside a product, e.g. "Mobile", "Desktop / TV". */
+export interface Variant {
+  id: string;
+  name: string;
+  description: string | null;
+  inStock: boolean;
+  sortOrder: number;
+  plans: Plan[];
 }
 
 export interface CategoryRef {
@@ -28,7 +40,9 @@ export interface Product {
   features: string[] | null;
   categoryId: string | null;
   category: CategoryRef | null;
+  /** Flat list of every plan (each carries `variantId`). */
   plans: Plan[];
+  variants?: Variant[];
   createdAt: string;
   updatedAt: string;
 }
@@ -133,6 +147,7 @@ export interface TrackedOrder {
     productName: string;
     productSlug: string;
     productImgUrl: string | null;
+    variantName?: string | null;
     planName: string;
     planValidity: string | null;
     unitPrice: number;
