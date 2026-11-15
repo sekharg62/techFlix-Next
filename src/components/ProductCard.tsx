@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import type { Product } from "@/types/catalog";
 import { formatBDT, isAvailable, startingPlan } from "@/lib/format";
+import { FitImage } from "@/components/product/FitImage";
 
 interface ProductCardProps {
   product: Product;
@@ -20,13 +20,12 @@ export function ProductCard({ product, priority, sizes }: ProductCardProps) {
 
   return (
     <div className="group relative flex flex-col justify-between bg-[var(--card-bg)] border border-[var(--card-border)] hover:border-[var(--color-brand-red)] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-      <Link href={href} className="block relative w-full aspect-[3/2] shrink-0 overflow-hidden bg-neutral-900">
-        <Image
+      <Link href={href} className="block relative w-full aspect-square shrink-0 overflow-hidden bg-neutral-900">
+        <FitImage
           src={product.imgUrl}
           alt={product.name}
-          fill
           priority={priority}
-          className="object-cover group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+          className="group-hover:scale-105 transition-transform duration-500"
           sizes={sizes || "(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 20vw"}
         />
         {planCount > 1 && (
@@ -106,7 +105,7 @@ export function ProductCard({ product, priority, sizes }: ProductCardProps) {
 export function ProductCardSkeleton() {
   return (
     <div className="flex flex-col bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl overflow-hidden animate-pulse">
-      <div className="w-full aspect-[3/2] bg-neutral-200 dark:bg-neutral-800" />
+      <div className="w-full aspect-square bg-neutral-200 dark:bg-neutral-800" />
       <div className="p-4 space-y-3">
         <div className="h-3 w-1/3 rounded bg-neutral-200 dark:bg-neutral-800" />
         <div className="h-4 w-3/4 rounded bg-neutral-200 dark:bg-neutral-800" />

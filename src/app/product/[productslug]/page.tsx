@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ChevronRight, Check, ShieldCheck, Clock } from "lucide-react";
 import { getProductBySlug, getProductSlugsForPrerender, getRelatedProducts } from "@/lib/data";
 import { formatBDT, isAvailable, startingPlan } from "@/lib/format";
 import { PurchasePanel } from "@/components/product/PurchasePanel";
 import { ProductSection } from "@/components/ProductSection";
+import { FitImage } from "@/components/product/FitImage";
 
 type Params = Promise<{ productslug: string }>;
 
@@ -96,15 +96,8 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
       {/* Mobile order: image → plans → features. Desktop: image + features left, plans right. */}
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-x-14 gap-y-8 lg:items-start">
         <div className="lg:col-start-1 lg:row-start-1">
-          <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden bg-neutral-950 border border-[var(--card-border)] shadow-xl">
-            <Image
-              src={product.imgUrl}
-              alt={product.name}
-              fill
-              priority
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
+          <div className="relative w-full aspect-square rounded-3xl overflow-hidden bg-neutral-950 border border-[var(--card-border)] shadow-xl">
+            <FitImage src={product.imgUrl} alt={product.name} priority sizes="(max-width: 1024px) 100vw, 50vw" />
             {!available && (
               <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
                 <span className="px-6 py-2.5 rounded-full bg-red-600 text-white font-black text-lg tracking-wider shadow-2xl">
