@@ -1,7 +1,7 @@
 export const siteConfig = {
   phone: "+880 1996-518593",
   whatsapp: "https://wa.me/8801996518593",
-  email: "techflix.premium2@gmail.com",
+  email: "techflix.premium@gmail.com",
   facebook: "https://www.facebook.com/profile.php?id=61589189276850",
   instagram: "", // No Instagram page yet: the footer hides the icon while this is empty
 
