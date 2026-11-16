@@ -9,9 +9,10 @@
   --color-brand-light: #ffffff;
   --color-brand-lighter: #f3f4f6;
 
-  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-code), ui-monospace, monospace;
+  /* Same family everywhere (Inter); Bangla characters fall back to Noto Sans Bengali */
+  --font-sans: var(--font-body), var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-body), var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-body), var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -43,7 +44,12 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+}
+
+/* Order numbers, TrxIDs, amounts: same font, but equal-width digits so they line up */
+.font-mono {
+  font-variant-numeric: tabular-nums;
 }
 
 @keyframes marquee {

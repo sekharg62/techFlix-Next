@@ -1,5 +1,6 @@
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { CategoryBar } from "@/components/CategoryBar";
+import { TrustBadges } from "@/components/TrustBadges";
 import { ProductSection } from "@/components/ProductSection";
 import { WhyChooseUsSection } from "@/components/WhyChooseUsSection";
 import { ReviewsSection } from "@/components/ReviewsSection";
@@ -25,6 +26,7 @@ export default async function Home() {
   return (
     <div className="w-full flex flex-col items-center justify-center pb-12">
       <HeroCarousel slides={slides} />
+      <TrustBadges />
       <CategoryBar categories={categories} />
 
       {sections.map((section, index) => (

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Kanit, JetBrains_Mono } from "next/font/google";
+import { Inter, Noto_Sans_Bengali } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeContextProvider } from "@/context/ThemeContext";
@@ -10,17 +10,19 @@ import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { getCategories } from "@/lib/data";
 
-const bodyFont = Kanit({
+// One font family for the whole storefront: Inter (variable font, every weight 100–900).
+const bodyFont = Inter({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
   display: "swap",
 });
 
-const monoFont = JetBrains_Mono({
-  variable: "--font-code",
-  subsets: ["latin"],
+// Inter has no Bengali letters: Bangla text (product descriptions, banners) falls back to this.
+const bengaliFont = Noto_Sans_Bengali({
+  variable: "--font-bengali",
+  subsets: ["bengali"],
   display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -43,7 +45,7 @@ export default async function RootLayout({
   const categories = await getCategories();
 
   return (
-    <html lang="en" suppressHydrationWarning className={`${bodyFont.variable} ${monoFont.variable} h-full antialiased`}>
+    <html lang="en" suppressHydrationWarning className={`${bodyFont.variable} ${bengaliFont.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col transition-colors duration-300">
         <NextThemesProvider
           attribute="class"
