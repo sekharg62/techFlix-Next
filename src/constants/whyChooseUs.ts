@@ -17,6 +17,6 @@ export const whyChooseUsData = [
   {
     icon: "⭐",
     title: "Trusted by Thousands",
-    description: "10,000+ happy customers — and growing everyday."
+    description: "2,000+ happy customers — and growing everyday."
   }
 ];

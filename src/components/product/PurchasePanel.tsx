@@ -16,8 +16,9 @@ export function PurchasePanel({ product }: { product: Product }) {
   const isBuyable = (plan: Plan) => plans.some((p) => p.id === plan.id);
   const cheapest = (list: Plan[]) => list.reduce<Plan | undefined>((min, p) => (!min || p.price < min.price ? p : min), undefined);
 
-  // Each variant (Mobile, Premium 4K…) is shown as its own section with its plan list,
-  // followed by any plans without a variant.
+  // Variants are device types (Phone/PC, TV + Any Device…); their plans are durations.
+  // The picker shows one row of plan chips and one row of device chips, and the
+  // selected plan is the one in the chosen device that matches the chosen plan label.
   const sortByOrder = (a: { sortOrder: number }, b: { sortOrder: number }) => a.sortOrder - b.sortOrder;
   const variantGroups = [...(product.variants ?? [])]
     .filter((v) => v.plans.length > 0)
@@ -26,18 +27,71 @@ export function PurchasePanel({ product }: { product: Product }) {
   const simplePlans = product.plans.filter((p) => !p.variantId).sort(sortByOrder);
   const hasVariants = variantGroups.length > 0;
   const groups = hasVariants
-    ? [...variantGroups, ...(simplePlans.length ? [{ id: "__simple", name: "Other plans", description: null, plans: simplePlans }] : [])]
+    ? [...variantGroups, ...(simplePlans.length ? [{ id: "__simple", name: "Other", description: null, plans: simplePlans }] : [])]
     : [{ id: "__simple", name: "", description: null, plans: [...product.plans].sort(sortByOrder) }];
 
-  // Default: cheapest buyable plan of the first variant that has stock.
+  // Plan names are often just the product name ("Netflix"), so prefer the validity
+  // ("30 days") as the label whenever names repeat inside a group.
+  const namesRepeat = groups.some((g) => new Set(g.plans.map((p) => p.name.trim().toLowerCase())).size < g.plans.length);
+  const planLabel = (p: Plan) =>
+    (namesRepeat ? p.validity || (p.durationDays ? `${p.durationDays} days` : null) : null) || p.name;
+  const planKey = (p: Plan) => planLabel(p).trim().toLowerCase();
+
+  // Every distinct plan option across devices, shortest duration first.
+  const options: { key: string; label: string; days: number; order: number }[] = [];
+  groups.forEach((g, gi) =>
+    g.plans.forEach((p, pi) => {
+      if (!options.some((o) => o.key === planKey(p))) {
+        options.push({ key: planKey(p), label: planLabel(p), days: p.durationDays ?? Infinity, order: gi * 1000 + pi });
+      }
+    })
+  );
+  options.sort((a, b) => a.days - b.days || a.order - b.order);
+
+  const planIn = (groupId: string, key: string) => groups.find((g) => g.id === groupId)?.plans.find((p) => planKey(p) === key);
+  const buyableIn = (groupId: string, key: string) => {
+    const p = planIn(groupId, key);
+    return p && isBuyable(p) ? p : undefined;
+  };
+
+  // Default: cheapest buyable plan of the first device that has stock.
   const initialGroup = groups.find((g) => g.plans.some(isBuyable)) ?? groups[0];
-  const [planId, setPlanId] = useState(cheapest(initialGroup?.plans.filter(isBuyable) ?? [])?.id ?? "");
+  const initialPlan = cheapest(initialGroup?.plans.filter(isBuyable) ?? []);
+  const [groupId, setGroupId] = useState(initialGroup?.id ?? "");
+  const [optionKey, setOptionKey] = useState(initialPlan ? planKey(initialPlan) : "");
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
-  const selected = plans.find((p) => p.id === planId);
-  const selectedGroup = groups.find((g) => g.plans.some((p) => p.id === planId));
+  const selected = buyableIn(groupId, optionKey);
+  const selectedGroup = groups.find((g) => g.id === groupId);
   const selectedVariant = hasVariants && selectedGroup?.id !== "__simple" ? selectedGroup : undefined;
+
+  // Picking a plan keeps the device if it offers that plan, otherwise moves to the cheapest device that does.
+  const choosePlan = (key: string) => {
+    setOptionKey(key);
+    if (!buyableIn(groupId, key)) {
+      const best = cheapest(groups.map((g) => buyableIn(g.id, key)).filter((p): p is Plan => !!p));
+      const g = best && groups.find((g) => g.plans.includes(best));
+      if (g) setGroupId(g.id);
+    }
+  };
+  // Picking a device keeps the plan if that device offers it, otherwise selects its cheapest plan.
+  const chooseDevice = (id: string) => {
+    setGroupId(id);
+    if (!buyableIn(id, optionKey)) {
+      const best = cheapest(groups.find((g) => g.id === id)?.plans.filter(isBuyable) ?? []);
+      if (best) setOptionKey(planKey(best));
+    }
+  };
+
+  const chip = (active: boolean, available: boolean) =>
+    `px-4 sm:px-5 py-2.5 rounded-xl border-2 text-sm sm:text-base font-bold transition-all ${
+      active
+        ? "border-[var(--color-brand-red)] bg-red-50 dark:bg-red-950/40 text-neutral-900 dark:text-white"
+        : available
+          ? "border-[var(--card-border)] bg-[var(--card-bg)] text-neutral-800 dark:text-neutral-100 hover:border-neutral-400 dark:hover:border-neutral-500"
+          : "border-dashed border-[var(--card-border)] text-neutral-400 dark:text-neutral-500 hover:border-neutral-400"
+    }`;
 
   const add = () => {
     if (!selected) return false;
@@ -50,7 +104,7 @@ export function PurchasePanel({ product }: { product: Product }) {
         imgUrl: product.imgUrl,
         categoryName: product.category?.name ?? null,
         // Display label only — the server re-prices by planId and stores the variant itself.
-        planName: selectedVariant ? `${selectedVariant.name} · ${selected.name}` : selected.name,
+        planName: selectedVariant ? `${selectedVariant.name} · ${planLabel(selected)}` : planLabel(selected),
         planValidity: selected.validity,
         unitPrice: selected.price,
       },
@@ -74,72 +128,56 @@ export function PurchasePanel({ product }: { product: Product }) {
   return (
     <div className="space-y-5">
       <fieldset>
-        <legend className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">
-          {hasVariants ? "Choose your plan" : "Choose a plan"}
-        </legend>
-        <div className={hasVariants ? "space-y-5" : ""} role="radiogroup">
-          {groups.map((g) => {
-            const from = cheapest(g.plans.filter(isBuyable));
-            const groupActive = selectedGroup?.id === g.id;
+        <legend className="text-sm font-bold text-neutral-600 dark:text-neutral-300 mb-2">Plan</legend>
+        <div className="flex flex-wrap gap-2.5" role="radiogroup" aria-label="Plan">
+          {options.map((o) => {
+            const inDevice = !!buyableIn(groupId, o.key);
+            const anywhere = groups.some((g) => buyableIn(g.id, o.key));
+            const active = o.key === optionKey && !!selected;
             return (
-              <section
-                key={g.id}
-                aria-label={g.name || undefined}
-                className={
-                  hasVariants
-                    ? `p-3 sm:p-4 rounded-2xl border transition-colors ${
-                        groupActive ? "border-[var(--color-brand-red)]/50 bg-red-50/40 dark:bg-red-950/10" : "border-[var(--card-border)]"
-                      }`
-                    : ""
-                }
+              <button
+                key={o.key}
+                type="button"
+                role="radio"
+                aria-checked={active}
+                disabled={!anywhere}
+                onClick={() => choosePlan(o.key)}
+                className={`${chip(active, inDevice)} ${anywhere ? "cursor-pointer" : "cursor-not-allowed opacity-60"}`}
               >
-                {hasVariants && (
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <div className="min-w-0">
-                      <h3 className="font-black text-base leading-tight">{g.name}</h3>
-                      {g.description && <p className="text-xs text-neutral-500 mt-0.5">{g.description}</p>}
-                    </div>
-                    <span className="shrink-0 text-[11px] font-bold px-2 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300">
-                      {from ? `From ${formatBDT(from.price)}` : "Out of stock"}
-                    </span>
-                  </div>
-                )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {g.plans.map((plan) => {
-                    const buyable = isBuyable(plan);
-                    const isSelected = plan.id === planId;
-                    return (
-                      <button
-                        key={plan.id}
-                        type="button"
-                        role="radio"
-                        aria-checked={isSelected}
-                        aria-label={`${g.name ? `${g.name} · ` : ""}${plan.name}, ${formatBDT(plan.price)}`}
-                        disabled={!buyable}
-                        onClick={() => setPlanId(plan.id)}
-                        className={`relative text-left p-4 rounded-2xl border-2 transition-all ${
-                          isSelected
-                            ? "border-[var(--color-brand-red)] bg-red-50 dark:bg-red-950/30 shadow-lg"
-                            : "border-[var(--card-border)] bg-[var(--card-bg)] hover:border-neutral-400"
-                        } ${buyable ? "cursor-pointer" : "opacity-50 cursor-not-allowed"}`}
-                      >
-                        {isSelected && (
-                          <span className="absolute top-3 right-3 w-5 h-5 rounded-full bg-[var(--color-brand-red)] text-white flex items-center justify-center">
-                            <Check className="w-3.5 h-3.5" />
-                          </span>
-                        )}
-                        <div className="font-extrabold">{plan.name}</div>
-                        <div className="text-xs text-neutral-500">{buyable ? plan.validity || "Digital delivery" : "Out of stock"}</div>
-                        <div className="text-xl font-black text-[var(--color-brand-red)] mt-1">{formatBDT(plan.price)}</div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </section>
+                {o.label}
+              </button>
             );
           })}
         </div>
       </fieldset>
+
+      {hasVariants && (
+        <fieldset>
+          <legend className="text-sm font-bold text-neutral-600 dark:text-neutral-300 mb-2">Device Type</legend>
+          <div className="flex flex-wrap gap-2.5" role="radiogroup" aria-label="Device type">
+            {groups.map((g) => {
+              const offers = buyableIn(g.id, optionKey);
+              const anyStock = g.plans.some(isBuyable);
+              const active = g.id === groupId;
+              return (
+                <button
+                  key={g.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  disabled={!anyStock}
+                  onClick={() => chooseDevice(g.id)}
+                  className={`${chip(active, !!offers)} ${anyStock ? "cursor-pointer" : "cursor-not-allowed opacity-60"}`}
+                >
+                  {g.name}
+                  {!anyStock && <span className="ml-1.5 text-xs font-semibold">(Out of stock)</span>}
+                </button>
+              );
+            })}
+          </div>
+          {selectedGroup?.description && <p className="text-xs text-neutral-500 mt-2">{selectedGroup.description}</p>}
+        </fieldset>
+      )}
 
       <div className="flex items-end justify-between gap-4">
         <div>
@@ -170,7 +208,7 @@ export function PurchasePanel({ product }: { product: Product }) {
         </div>
         <div className="text-right">
           <span className="text-xs text-neutral-500 block">
-            {selected ? `${selectedVariant ? `${selectedVariant.name} · ` : ""}${selected.name} · ` : ""}Total
+            {selected ? `${selectedVariant ? `${selectedVariant.name} · ` : ""}${planLabel(selected)} · ` : ""}Total
           </span>
           <span className="text-3xl font-black text-[var(--color-brand-red)]">{formatBDT((selected?.price ?? 0) * quantity)}</span>
         </div>
