@@ -1,9 +1,9 @@
-import { BadgeCheck, Headset, Truck } from "lucide-react";
+import { BadgeCheck, Truck, Users } from "lucide-react";
 
 const BADGES = [
   { icon: BadgeCheck, label: "100% Verified" },
-  { icon: Truck, label: "Usually 5-10 min" },
-  { icon: Headset, label: "24/7 Support" },
+  { icon: Truck, label: "Usually Delivery Within 5-10 mins" },
+  { icon: Users, label: "Trusted By 2000+ Customers" },
 ];
 
 /** Pill of trust tags shown under the hero banner. */
