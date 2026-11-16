@@ -32,6 +32,9 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
 
   if (totalSlides === 0) return null;
 
+  // The frame always has the banners' own shape (5:3, e.g. 1619×971), so a banner is never
+  // cropped — on phones, tablets, laptops and "desktop mode" on a phone alike. On short, wide
+  // screens the width is capped so the whole banner still fits above the fold.
   return (
     <section
       className="relative w-full max-w-[1400px] mx-auto px-3 sm:px-4 py-2"
@@ -56,7 +59,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
       aria-roledescription="carousel"
       aria-label="Featured offers"
     >
-      <div className="relative w-full rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden shadow-lg sm:shadow-2xl border border-[var(--card-border)] bg-neutral-950 aspect-[16/9] sm:aspect-auto sm:h-[60vh] md:h-[calc(100vh-100px)] md:max-h-[85vh] flex items-center">
+      <div className="relative w-full rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden shadow-lg sm:shadow-2xl border border-[var(--card-border)] bg-neutral-950 aspect-[5/3] mx-auto max-w-[calc((100svh-110px)*5/3)] flex items-center">
         {slides.map((slide, index) => {
           const isActive = index === currentIndex;
           return (

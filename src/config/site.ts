@@ -1,3 +1,5 @@
+import { siteConfig as contact } from "@/constants/siteConfig";
+
 export const siteConfig = {
   name: "TECH FLIX",
   description: "The Future of Entertainment is Here.",
@@ -7,20 +9,20 @@ export const siteConfig = {
       answer: "TECH FLIX is a premium streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices."
     },
     {
-      question: "How much does TECH FLIX cost?",
-      answer: "Watch TECH FLIX on your smartphone, tablet, Smart TV, laptop, or streaming device, all for one fixed monthly fee. Plans range from $9.99 to $19.99 a month. No extra costs, no contracts."
+      question: "How fast will I get my subscription?",
+      answer: "Most orders arrive within 5 to 10 minutes. Your login or code is sent on WhatsApp."
     },
     {
-      question: "Where can I watch?",
-      answer: "Watch anywhere, anytime. Sign in with your TECH FLIX account to watch instantly on the web at techflix.com from your personal computer or on any internet-connected device."
+      question: "How can I pay?",
+      answer: "You can pay with bKash, Nagad or Rocket using Send Money."
     },
     {
-      question: "How do I cancel?",
-      answer: "TECH FLIX is flexible. There are no pesky contracts and no commitments. You can easily cancel your account online in two clicks. There are no cancellation fees – start or stop your account anytime."
+      question: "What if my account or code stops working?",
+      answer: "Message us on WhatsApp. If it stops working during your plan, we replace it or refund you."
     },
     {
-      question: "What can I watch on TECH FLIX?",
-      answer: "TECH FLIX has an extensive library of feature films, documentaries, TV shows, anime, award-winning TECH FLIX originals, and more. Watch as much as you want, anytime you want."
+      question: "How do I contact support?",
+      answer: `Chat with us on WhatsApp at ${contact.phone}, from 9 AM to midnight.`
     }
   ]
 };
