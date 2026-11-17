@@ -37,7 +37,7 @@ export function ReviewsSection({ reviews }: { reviews: Review[] }) {
         className="pointer-events-none absolute left-1/2 top-24 -translate-x-1/2 h-72 w-full max-w-4xl rounded-full bg-[var(--color-brand-red)]/10 blur-3xl"
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 text-center mb-10 sm:mb-12">
+      <div className="relative max-w-site mx-auto px-4 sm:px-6 text-center mb-10 sm:mb-12">
         <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-red-100 dark:bg-red-950/60 text-[var(--color-brand-red)] mb-3">
           Reviews
         </span>

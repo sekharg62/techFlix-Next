@@ -65,7 +65,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
   };
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <main className="w-full max-w-site mx-auto px-4 sm:px-6 py-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}

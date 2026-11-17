@@ -144,7 +144,7 @@ export function Header({ categories }: { categories: CategorySummary[] }) {
 
   return (
     <header data-print-hide className="sticky top-0 z-50 w-full backdrop-blur-md bg-white/90 dark:bg-black/90 border-b border-[var(--card-border)] transition-colors">
-      <div className="max-w-7xl mx-auto flex items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr] gap-4 px-4 sm:px-6 py-4">
+      <div className="max-w-site mx-auto flex items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr] gap-4 px-4 sm:px-6 py-4">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2 justify-self-start hover:opacity-90 transition-opacity">
           <Image src="/images/logo-emblem.png" alt="TECH FLIX logo" width={46} height={40} loading="eager" className="h-10 w-auto" />

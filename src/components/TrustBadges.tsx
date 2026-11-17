@@ -9,7 +9,7 @@ const BADGES = [
 /** Pill of trust tags shown under the hero banner. */
 export function TrustBadges() {
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 mt-3 sm:mt-4 flex justify-center">
+    <div className="w-full max-w-site mx-auto px-4 sm:px-6 mt-3 sm:mt-4 flex justify-center">
       <ul
         aria-label="Why shop with TECH FLIX"
         className="inline-flex flex-wrap items-center justify-center gap-x-1 gap-y-1 p-1.5 rounded-3xl sm:rounded-full border border-[var(--card-border)] bg-[var(--card-bg)]/80 backdrop-blur-sm shadow-sm"

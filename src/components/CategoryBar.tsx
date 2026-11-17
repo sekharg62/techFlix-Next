@@ -12,7 +12,7 @@ export function CategoryBar({ categories: all }: { categories: CategorySummary[]
   const desktopCols = categories.length % 3 === 0 && categories.length % 4 !== 0 ? "lg:grid-cols-3" : "lg:grid-cols-4";
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 my-8">
+    <section className="w-full max-w-site mx-auto px-4 sm:px-6 my-8">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-[var(--color-brand-red)]" />

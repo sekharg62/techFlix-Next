@@ -6,7 +6,7 @@ const ICONS: LucideIcon[] = [BadgeCheck, Zap, ShieldCheck, Users];
 
 export function WhyChooseUsSection() {
   return (
-    <section className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <section className="relative w-full max-w-site mx-auto px-4 sm:px-6 py-16 sm:py-20">
       {/* Soft red glow behind the section */}
       <div
         aria-hidden="true"

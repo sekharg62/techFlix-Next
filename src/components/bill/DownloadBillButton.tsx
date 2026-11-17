@@ -7,6 +7,8 @@ import { orderService, errorMessage } from "@/services/orderService";
 
 type Props = {
   className?: string;
+  /** Classes for the outer wrapper (e.g. "w-full" to stretch the button in a grid). */
+  wrapperClassName?: string;
   label?: string;
 } & ({ order: TrackedOrder } | { orderNumber: string; email: string });
 
@@ -30,7 +32,7 @@ export function DownloadBillButton(props: Props) {
   };
 
   return (
-    <span className="inline-flex flex-col items-center gap-1">
+    <span className={props.wrapperClassName || "inline-flex flex-col items-center gap-1"}>
       <button
         type="button"
         onClick={download}

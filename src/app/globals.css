@@ -10,6 +10,9 @@
   --color-brand-lighter: #f3f4f6;
 
   /* Same family everywhere (Inter); Bangla characters fall back to Noto Sans Bengali */
+  /* Site content width: one value for header, sections, product pages and footer (max-w-site) */
+  --container-site: 96rem;
+
   --font-sans: var(--font-body), var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-body), var(--font-bengali), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-body), var(--font-bengali), ui-sans-serif, system-ui, sans-serif;

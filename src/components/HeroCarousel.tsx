@@ -29,7 +29,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
   // it pauses on hover/touch, and stops for visitors who prefer reduced motion.
   return (
     <section
-      className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 pt-3 sm:pt-4"
+      className="relative w-full max-w-site mx-auto px-4 sm:px-6 pt-3 sm:pt-4"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onKeyDown={(e) => {
@@ -78,7 +78,7 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
                   fill
                   priority={index === 0}
                   className="object-cover object-center"
-                  sizes="(max-width: 1280px) 100vw, 1280px"
+                  sizes="(max-width: 1536px) 100vw, 1536px"
                 />
               </Link>
             </div>

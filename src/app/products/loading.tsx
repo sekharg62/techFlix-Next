@@ -2,7 +2,7 @@ import { ProductCardSkeleton } from "@/components/ProductCard";
 
 export default function Loading() {
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-10" aria-busy="true">
+    <main className="w-full max-w-site mx-auto px-4 sm:px-6 py-10" aria-busy="true">
       <div className="h-4 w-28 rounded bg-neutral-200 dark:bg-neutral-800 mb-6 animate-pulse" />
       <div className="mb-8 pb-6 border-b border-[var(--card-border)] space-y-3 animate-pulse">
         <div className="h-9 w-72 rounded bg-neutral-200 dark:bg-neutral-800" />

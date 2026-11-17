@@ -5,7 +5,7 @@ import { WhatsAppIcon } from "@/components/WhatsAppButton";
 
 export function FaqSection() {
   return (
-    <section id="faq" className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-20 scroll-mt-24">
+    <section id="faq" className="relative w-full max-w-site mx-auto px-4 sm:px-6 py-16 sm:py-20 scroll-mt-24">
       {/* Soft red glow behind the section */}
       <div
         aria-hidden="true"

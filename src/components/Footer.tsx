@@ -86,7 +86,7 @@ export function Footer({ categories = [] }: { categories?: CategorySummary[] }) 
       <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--color-brand-red)]/60 to-transparent" />
       <div aria-hidden="true" className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-64 w-full max-w-3xl rounded-full bg-[var(--color-brand-red)]/10 blur-3xl" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="relative max-w-site mx-auto px-4 sm:px-6">
         {/* Highlights */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-px rounded-lg overflow-hidden border border-[var(--card-border)] bg-[var(--card-border)] mb-12">
           {HIGHLIGHTS.map(({ icon: Icon, title, text }) => (

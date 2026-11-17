@@ -60,7 +60,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
   };
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-10">
+    <main className="w-full max-w-site mx-auto px-4 sm:px-6 py-10">
       <Link
         href="/"
         className="inline-flex items-center gap-2 text-sm font-bold text-neutral-500 hover:text-[var(--color-brand-red)] mb-6 transition-colors"
