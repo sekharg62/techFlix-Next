@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -21,23 +21,15 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
     setCurrentIndex((prev) => (prev - 1 + totalSlides) % Math.max(totalSlides, 1));
   }, [totalSlides]);
 
-  // Auto-play every 5s (paused on hover or while the tab is hidden)
-  useEffect(() => {
-    if (isPaused || totalSlides <= 1) return;
-    const timer = setInterval(() => {
-      if (!document.hidden) nextSlide();
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [isPaused, totalSlides, nextSlide]);
-
   if (totalSlides === 0) return null;
 
   // The frame always has the banners' own shape (5:3, e.g. 1619×971), so a banner is never
-  // cropped — on phones, tablets, laptops and "desktop mode" on a phone alike. On short, wide
-  // screens the width is capped so the whole banner still fits above the fold.
+  // cropped. It uses the same max width and side padding as the header and page sections.
+  // Auto-play is driven by the active indicator's fill animation (see .animate-hero-progress):
+  // it pauses on hover/touch, and stops for visitors who prefer reduced motion.
   return (
     <section
-      className="relative w-full max-w-[1400px] mx-auto px-3 sm:px-4 py-2"
+      className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 pt-3 sm:pt-4"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onKeyDown={(e) => {
@@ -59,67 +51,99 @@ export function HeroCarousel({ slides }: { slides: HeroSlide[] }) {
       aria-roledescription="carousel"
       aria-label="Featured offers"
     >
-      <div className="relative w-full rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden shadow-lg sm:shadow-2xl border border-[var(--card-border)] bg-neutral-950 aspect-[5/3] mx-auto max-w-[calc((100svh-110px)*5/3)] flex items-center">
+      {/* Soft red glow behind the banner */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-10 top-10 bottom-0 rounded-full bg-[var(--color-brand-red)]/15 blur-3xl"
+      />
+
+      <div className="group relative w-full aspect-[5/3] overflow-hidden rounded-lg bg-neutral-950 border border-white/10 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.7)]">
         {slides.map((slide, index) => {
           const isActive = index === currentIndex;
           return (
             <div
               key={slide.id}
-              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-                isActive ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
+              className={`absolute inset-0 transition-[opacity,transform] duration-700 ease-out ${
+                isActive ? "opacity-100 scale-100 z-10" : "opacity-0 scale-[1.015] z-0 pointer-events-none"
               }`}
               aria-hidden={!isActive}
               role="group"
               aria-roledescription="slide"
               aria-label={`${index + 1} of ${totalSlides}`}
             >
-              <Link href="/products" className="block relative w-full h-full group" tabIndex={isActive ? 0 : -1}>
+              <Link href="/products" className="block relative w-full h-full" tabIndex={isActive ? 0 : -1}>
                 <Image
                   src={slide.imageUrl}
                   alt={`Featured offer ${index + 1}`}
                   fill
                   priority={index === 0}
-                  className="object-cover object-center md:group-hover:scale-105 transition-transform duration-1000"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1400px) 100vw, 1400px"
+                  className="object-cover object-center"
+                  sizes="(max-width: 1280px) 100vw, 1280px"
                 />
-                <div className="absolute inset-x-0 bottom-0 h-12 sm:h-20 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
               </Link>
             </div>
           );
         })}
 
+        {/* Thin inner highlight for a polished edge */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 rounded-lg ring-1 ring-inset ring-white/10" />
+
         {totalSlides > 1 && (
           <>
+            {/* Arrows: hidden until hover on desktop, so they never sit on top of the artwork */}
             <button
+              type="button"
               onClick={prevSlide}
-              className="absolute left-2 sm:left-6 z-20 p-1.5 sm:p-3.5 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 transition-all hover:scale-110 active:scale-95"
+              className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 items-center justify-center rounded-full bg-black/35 hover:bg-black/60 text-white backdrop-blur-md border border-white/20 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 focus-visible:opacity-100 focus-visible:translate-x-0 transition-all duration-300"
               aria-label="Previous slide"
             >
-              <ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
             <button
+              type="button"
               onClick={nextSlide}
-              className="absolute right-2 sm:right-6 z-20 p-1.5 sm:p-3.5 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-md border border-white/20 transition-all hover:scale-110 active:scale-95"
+              className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-30 w-11 h-11 items-center justify-center rounded-full bg-black/35 hover:bg-black/60 text-white backdrop-blur-md border border-white/20 opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 focus-visible:opacity-100 focus-visible:translate-x-0 transition-all duration-300"
               aria-label="Next slide"
             >
-              <ChevronRight className="w-4 h-4 sm:w-6 sm:h-6" />
+              <ChevronRight className="w-5 h-5" />
             </button>
-            <div className="absolute bottom-2 sm:bottom-4 inset-x-0 z-20 flex items-center justify-center gap-1.5 sm:gap-2">
-              {slides.map((slide, idx) => (
-                <button
-                  key={slide.id}
-                  onClick={() => setCurrentIndex(idx)}
-                  className={`h-1.5 sm:h-2.5 rounded-full transition-all duration-300 ${
-                    idx === currentIndex ? "w-5 sm:w-8 bg-[var(--color-brand-red)]" : "w-1.5 sm:w-2.5 bg-white/50 hover:bg-white/80"
-                  }`}
-                  aria-label={`Go to slide ${idx + 1}`}
-                  aria-current={idx === currentIndex}
-                />
-              ))}
-            </div>
           </>
         )}
       </div>
+
+      {/* Indicators below the banner: the active one fills as the slide plays */}
+      {totalSlides > 1 && (
+        <div className="relative flex items-center justify-center gap-2 pt-3 sm:pt-4">
+          {slides.map((slide, idx) => {
+            const active = idx === currentIndex;
+            return (
+              <button
+                key={slide.id}
+                type="button"
+                onClick={() => setCurrentIndex(idx)}
+                className="group/dot py-2 cursor-pointer"
+                aria-label={`Go to slide ${idx + 1}`}
+                aria-current={active}
+              >
+                <span
+                  className={`relative block h-1 rounded-full overflow-hidden transition-all duration-300 ${
+                    active ? "w-10 sm:w-12 bg-neutral-300 dark:bg-white/15" : "w-4 sm:w-5 bg-neutral-300 dark:bg-white/20 group-hover/dot:bg-neutral-400 dark:group-hover/dot:bg-white/40"
+                  }`}
+                >
+                  {active && (
+                    <span
+                      key={currentIndex}
+                      onAnimationEnd={nextSlide}
+                      style={{ animationPlayState: isPaused ? "paused" : "running" }}
+                      className="absolute inset-0 origin-left rounded-full bg-[var(--color-brand-red)] animate-hero-progress motion-reduce:animate-none motion-reduce:scale-x-100"
+                    />
+                  )}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }

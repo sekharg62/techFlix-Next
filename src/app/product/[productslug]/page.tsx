@@ -7,6 +7,7 @@ import { formatBDT, isAvailable, startingPlan } from "@/lib/format";
 import { PurchasePanel } from "@/components/product/PurchasePanel";
 import { ProductSection } from "@/components/ProductSection";
 import { FitImage } from "@/components/product/FitImage";
+import { PlanRibbon } from "@/components/product/PlanRibbon";
 
 type Params = Promise<{ productslug: string }>;
 
@@ -42,7 +43,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
   const product = await getProductBySlug(productslug);
   if (!product) notFound();
 
-  const related = await getRelatedProducts(product, 5);
+  const related = await getRelatedProducts(product, 4);
   const available = isAvailable(product);
   const features = Array.isArray(product.features) ? product.features.filter((f) => typeof f === "string") : [];
 
@@ -96,11 +97,12 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
       {/* Mobile order: image → plans → features. Desktop: image + features left, plans right. */}
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto_1fr] gap-x-14 gap-y-8 lg:items-start">
         <div className="lg:col-start-1 lg:row-start-1">
-          <div className="relative w-full aspect-square rounded-3xl overflow-hidden bg-neutral-950 border border-[var(--card-border)] shadow-xl">
+          <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-neutral-950 border border-[var(--color-brand-red)]/25 shadow-[0_20px_70px_-12px_rgba(229,9,20,0.16),0_0_110px_14px_rgba(229,9,20,0.08),0_0_180px_44px_rgba(229,9,20,0.05)]">
             <FitImage src={product.imgUrl} alt={product.name} priority sizes="(max-width: 1024px) 100vw, 50vw" />
+            <PlanRibbon count={product.plans.length} size="lg" />
             {!available && (
               <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-                <span className="px-6 py-2.5 rounded-full bg-red-600 text-white font-black text-lg tracking-wider shadow-2xl">
+                <span className="px-6 py-2.5 rounded-md bg-red-600 text-white font-black text-lg tracking-wider shadow-2xl">
                   OUT OF STOCK
                 </span>
               </div>
@@ -110,7 +112,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
 
         {features.length > 0 && (
           <div className="order-last lg:order-none lg:col-start-1 lg:row-start-2">
-            <div className="p-5 rounded-2xl bg-[var(--card-bg)] border border-[var(--card-border)]">
+            <div className="p-5 rounded-lg bg-[var(--card-bg)] border border-[var(--card-border)]">
               <h2 className="text-sm font-black uppercase tracking-wider text-neutral-500 mb-3">What you get</h2>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {features.map((feature) => (
@@ -129,7 +131,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
             {product.category && (
               <Link
                 href={`/products?category=${product.category.slug}`}
-                className="inline-block px-3 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-bold text-[var(--color-brand-red)]"
+                className="inline-block px-3 py-1 rounded-md bg-neutral-100 dark:bg-neutral-800 text-xs font-bold text-[var(--color-brand-red)]"
               >
                 {product.category.name}
               </Link>
@@ -167,6 +169,7 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
           badgeText="MORE LIKE THIS"
           title={`More in ${product.category?.name ?? "this category"}`}
           products={related}
+          flush
           viewAllLink={product.category ? `/products?category=${product.category.slug}` : "/products"}
         />
       )}

@@ -65,6 +65,16 @@ h1, h2, h3, h4, h5, h6 {
   animation-play-state: paused;
 }
 
+/* Hero carousel: the active indicator fills over the slide's display time;
+   when it finishes, the carousel moves to the next slide. */
+@keyframes hero-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.animate-hero-progress {
+  animation: hero-progress 6s linear forwards;
+}
+
 
 /* Printing a bill: only the bill sheet, on white paper */
 @media print {

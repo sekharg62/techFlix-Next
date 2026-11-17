@@ -11,14 +11,16 @@ interface ProductSectionProps {
   viewAllLink?: string;
   /** Eager-load images (use for the first section on the page). */
   priority?: boolean;
+  /** Drop the side padding when the section sits inside an already padded page container. */
+  flush?: boolean;
 }
 
-export function ProductSection({ badgeText, title, subtitle, products, viewAllLink = "/products", priority }: ProductSectionProps) {
+export function ProductSection({ badgeText, title, subtitle, products, viewAllLink = "/products", priority, flush }: ProductSectionProps) {
   if (products.length === 0) return null;
-  const displayProducts = products.slice(0, 5);
+  const displayProducts = products.slice(0, 4);
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 my-10">
+    <section className={`w-full max-w-7xl mx-auto my-10 ${flush ? "" : "px-4 sm:px-6"}`}>
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 pb-4 border-b border-[var(--card-border)]">
         <div>
           {badgeText && (
@@ -32,14 +34,14 @@ export function ProductSection({ badgeText, title, subtitle, products, viewAllLi
 
         <Link
           href={viewAllLink}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-100 dark:bg-neutral-800/80 hover:bg-[var(--color-brand-red)] hover:text-white font-bold text-sm transition-all duration-200 shadow-sm self-start sm:self-auto group"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-neutral-100 dark:bg-neutral-800/80 hover:bg-[var(--color-brand-red)] hover:text-white font-bold text-sm transition-all duration-200 shadow-sm self-start sm:self-auto group"
         >
           <span>View all</span>
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {displayProducts.map((product, index) => (
           <ProductCard key={product.id} product={product} priority={priority && index < 2} />
         ))}

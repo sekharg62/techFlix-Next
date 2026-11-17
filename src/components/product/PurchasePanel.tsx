@@ -85,7 +85,7 @@ export function PurchasePanel({ product }: { product: Product }) {
   };
 
   const chip = (active: boolean, available: boolean) =>
-    `px-4 sm:px-5 py-2.5 rounded-xl border-2 text-sm sm:text-base font-bold transition-all ${
+    `px-4 sm:px-5 py-2.5 rounded-md border-2 text-sm sm:text-base font-bold transition-all ${
       active
         ? "border-[var(--color-brand-red)] bg-red-50 dark:bg-red-950/40 text-neutral-900 dark:text-white"
         : available
@@ -115,10 +115,10 @@ export function PurchasePanel({ product }: { product: Product }) {
 
   if (plans.length === 0) {
     return (
-      <div className="p-5 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-[var(--card-border)] space-y-3">
+      <div className="p-5 rounded-lg bg-neutral-50 dark:bg-neutral-900 border border-[var(--card-border)] space-y-3">
         <p className="font-extrabold">Currently unavailable</p>
         <p className="text-sm text-neutral-500">This product is out of stock. Contact support to be notified when it is back.</p>
-        <Link href="/support" className="inline-block px-5 py-2.5 rounded-full bg-[var(--color-brand-red)] text-white font-bold text-sm">
+        <Link href="/support" className="inline-block px-5 py-2.5 rounded-md bg-[var(--color-brand-red)] text-white font-bold text-sm">
           Contact support
         </Link>
       </div>
@@ -182,12 +182,12 @@ export function PurchasePanel({ product }: { product: Product }) {
       <div className="flex items-end justify-between gap-4">
         <div>
           <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider block mb-2">Quantity</span>
-          <div className="inline-flex items-center rounded-2xl border border-[var(--card-border)] bg-[var(--card-bg)] p-1">
+          <div className="inline-flex items-center rounded-md border border-[var(--card-border)] bg-[var(--card-bg)] p-1">
             <button
               type="button"
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
               disabled={quantity <= 1}
-              className="p-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-40"
+              className="p-2.5 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-40"
               aria-label="Decrease quantity"
             >
               <Minus className="w-4 h-4" />
@@ -199,7 +199,7 @@ export function PurchasePanel({ product }: { product: Product }) {
               type="button"
               onClick={() => setQuantity((q) => Math.min(MAX_QUANTITY, q + 1))}
               disabled={quantity >= MAX_QUANTITY}
-              className="p-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-40"
+              className="p-2.5 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-40"
               aria-label="Increase quantity"
             >
               <Plus className="w-4 h-4" />
@@ -223,7 +223,7 @@ export function PurchasePanel({ product }: { product: Product }) {
               setTimeout(() => setAdded(false), 2500);
             }
           }}
-          className="py-4 px-6 rounded-2xl border-2 border-[var(--color-brand-red)] text-[var(--color-brand-red)] hover:bg-[var(--color-brand-red)] hover:text-white font-extrabold transition-all flex items-center justify-center gap-2 active:scale-95"
+          className="py-4 px-6 rounded-md border-2 border-[var(--color-brand-red)] text-[var(--color-brand-red)] hover:bg-[var(--color-brand-red)] hover:text-white font-extrabold transition-all flex items-center justify-center gap-2 active:scale-95"
         >
           {added ? <Check className="w-5 h-5" /> : <ShoppingBag className="w-5 h-5" />}
           {added ? "Added to cart" : "Add to cart"}
@@ -231,7 +231,7 @@ export function PurchasePanel({ product }: { product: Product }) {
         <button
           type="button"
           onClick={() => add() && router.push("/checkout")}
-          className="py-4 px-6 rounded-2xl bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-extrabold transition-all shadow-xl flex items-center justify-center gap-2 active:scale-95"
+          className="py-4 px-6 rounded-md bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-extrabold transition-all shadow-xl flex items-center justify-center gap-2 active:scale-95"
         >
           <Zap className="w-5 h-5 fill-white" />
           Buy now
