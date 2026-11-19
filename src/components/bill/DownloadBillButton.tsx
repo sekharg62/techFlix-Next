@@ -39,7 +39,7 @@ export function DownloadBillButton(props: Props) {
         disabled={busy}
         className={
           props.className ||
-          "inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-bold text-sm disabled:opacity-60 transition-colors"
+          "inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-bold text-sm disabled:opacity-60 transition-colors"
         }
       >
         {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}

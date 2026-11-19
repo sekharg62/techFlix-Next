@@ -107,7 +107,7 @@ export function OrderTracker({ paymentMethods }: { paymentMethods: PaymentMethod
         <p className="text-neutral-500 text-sm mt-1">Enter the order number from your confirmation and the email you used.</p>
       </div>
 
-      <form onSubmit={submit} className="p-5 sm:p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl grid grid-cols-1 sm:grid-cols-[1fr_1.4fr_auto] gap-4 items-end">
+      <form onSubmit={submit} className="p-5 sm:p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg grid grid-cols-1 sm:grid-cols-[1fr_1.4fr_auto] gap-4 items-end">
         <Field label="Order number">
           <input value={orderNumber} onChange={(e) => setOrderNumber(e.target.value.toUpperCase())} placeholder="TF-000123" className={`${inputCls()} font-mono`} />
         </Field>
@@ -117,7 +117,7 @@ export function OrderTracker({ paymentMethods }: { paymentMethods: PaymentMethod
         <button
           type="submit"
           disabled={loading}
-          className="h-[46px] px-6 rounded-2xl bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-60"
+          className="h-[46px] px-6 rounded-lg bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-60"
         >
           {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <PackageSearch className="w-4 h-4" />}
           Track
@@ -125,13 +125,13 @@ export function OrderTracker({ paymentMethods }: { paymentMethods: PaymentMethod
       </form>
 
       {error && (
-        <div role="alert" className="mt-5 flex gap-2 p-4 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-sm font-semibold text-red-700 dark:text-red-300">
+        <div role="alert" className="mt-5 flex gap-2 p-4 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-sm font-semibold text-red-700 dark:text-red-300">
           <AlertCircle className="w-5 h-5 shrink-0" />
           {error}
         </div>
       )}
 
-      {loading && !order && <div className="mt-6 h-64 rounded-3xl bg-neutral-200 dark:bg-neutral-800 animate-pulse" />}
+      {loading && !order && <div className="mt-6 h-64 rounded-lg bg-neutral-200 dark:bg-neutral-800 animate-pulse" />}
 
       {order && (
         <OrderView
@@ -147,7 +147,7 @@ export function OrderTracker({ paymentMethods }: { paymentMethods: PaymentMethod
       {!order && recent.length > 0 && (
         <section className="mt-8">
           <h2 className="text-sm font-black uppercase tracking-wider text-neutral-500 mb-3">Orders placed on this device</h2>
-          <ul className="divide-y divide-[var(--card-border)] bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl overflow-hidden">
+          <ul className="divide-y divide-[var(--card-border)] bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg overflow-hidden">
             {recent.map((r) => (
               <li key={r.orderNumber}>
                 <Link
@@ -209,7 +209,7 @@ function OrderView({
 
   return (
     <section className="mt-6 space-y-6">
-      <div className="p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl space-y-6">
+      <div className="p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="text-xs font-bold text-neutral-500">Order</div>
@@ -249,11 +249,11 @@ function OrderView({
         <div className="flex flex-wrap gap-2 pt-1">
           <DownloadBillButton
             order={order}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-bold text-xs disabled:opacity-60"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-bold text-xs disabled:opacity-60"
           />
           <Link
             href={billHref(order.orderNumber, email)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--card-border)] font-bold text-xs hover:border-[var(--color-brand-red)]"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-[var(--card-border)] font-bold text-xs hover:border-[var(--color-brand-red)]"
           >
             <FileText className="w-3.5 h-3.5" />
             View bill
@@ -261,23 +261,23 @@ function OrderView({
         </div>
 
         {order.status === "DELIVERED" && (
-          <p className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+          <p className="p-3 rounded-md bg-emerald-50 dark:bg-emerald-950/40 text-sm font-semibold text-emerald-700 dark:text-emerald-300">
             Your subscription details have been delivered. Check your email and WhatsApp.
           </p>
         )}
         {order.status === "PROCESSING" && (
-          <p className="p-3 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sm font-semibold text-sky-700 dark:text-sky-300">
+          <p className="p-3 rounded-md bg-sky-50 dark:bg-sky-950/40 text-sm font-semibold text-sky-700 dark:text-sky-300">
             Payment confirmed. We are preparing your subscription — you will receive it shortly.
           </p>
         )}
       </div>
 
-      <div className="p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl">
+      <div className="p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg">
         <h2 className="font-black mb-4">Items</h2>
         <ul className="divide-y divide-[var(--card-border)]">
           {order.items.map((item, i) => (
             <li key={i} className="flex items-center gap-4 py-3">
-              <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-neutral-900 shrink-0">
+              <div className="relative w-12 h-12 rounded-md overflow-hidden bg-neutral-900 shrink-0">
                 {item.productImgUrl && <Image src={item.productImgUrl} alt="" fill sizes="48px" className="object-cover" />}
               </div>
               <div className="flex-1 min-w-0">
@@ -306,7 +306,7 @@ function OrderView({
       </div>
 
       {latestPayment && (
-        <div className="p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl space-y-3">
+        <div className="p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg space-y-3">
           <h2 className="font-black">Payment</h2>
           {order.payments.map((p) => (
             <div key={p.trxId} className="flex flex-wrap items-center justify-between gap-2 text-sm">
@@ -375,7 +375,7 @@ function ResubmitPayment({
   };
 
   return (
-    <form onSubmit={submit} noValidate className="p-6 bg-[var(--card-bg)] border-2 border-[var(--color-brand-red)] rounded-3xl space-y-5">
+    <form onSubmit={submit} noValidate className="p-6 bg-[var(--card-bg)] border-2 border-[var(--color-brand-red)] rounded-lg space-y-5">
       <div>
         <h2 className="font-black text-lg">Send your payment again</h2>
         <p className="text-sm text-neutral-500">Your last payment could not be verified. Pay again and enter the new transaction ID.</p>
@@ -402,7 +402,7 @@ function ResubmitPayment({
           {error}
         </p>
       )}
-      <button type="submit" disabled={submitting} className="w-full py-3.5 rounded-full bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-black flex items-center justify-center gap-2 disabled:opacity-60">
+      <button type="submit" disabled={submitting} className="w-full py-3.5 rounded-md bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-black flex items-center justify-center gap-2 disabled:opacity-60">
         {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
         Submit payment
       </button>

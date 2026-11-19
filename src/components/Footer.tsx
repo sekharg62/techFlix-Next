@@ -24,6 +24,7 @@ const LEGAL_LINKS = [
   { href: "/legal/privacy", label: "Privacy Policy" },
   { href: "/legal/terms", label: "Terms & Conditions" },
   { href: "/legal/warranty-refund", label: "Warranty & Refund Policy" },
+  { href: "/legal/disclaimer", label: "Disclaimer" },
 ];
 
 const PAYMENTS = [
@@ -219,6 +220,15 @@ export function Footer({ categories = [] }: { categories?: CategorySummary[] }) 
             </div>
           </div>
         </div>
+
+        {/* Brand disclaimer */}
+        <p className="text-xs leading-relaxed text-neutral-500 text-center md:text-left pt-6 pb-5 border-t border-[var(--card-border)]">
+          Tech Flix is an independent digital service provider and is not officially affiliated with any of the brands
+          mentioned. All trademarks belong to their respective owners.{" "}
+          <Link href="/legal/disclaimer" className="font-semibold underline underline-offset-2 hover:text-[var(--color-brand-red)]">
+            Read full disclaimer
+          </Link>
+        </p>
 
         {/* Bottom bar */}
         <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-5 pt-6 border-t border-[var(--card-border)]">

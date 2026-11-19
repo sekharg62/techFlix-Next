@@ -139,7 +139,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Sea
           )}
         </>
       ) : (
-        <div className="text-center py-20 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl p-8">
+        <div className="text-center py-20 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-8">
           <SearchX className="w-12 h-12 mx-auto mb-4 text-neutral-400" />
           <p className="text-lg font-bold">No products found</p>
           <p className="text-sm text-neutral-500 mt-1">Try a different search or category.</p>

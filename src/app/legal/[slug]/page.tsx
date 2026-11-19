@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ShieldCheck, FileText } from "lucide-react";
+import { ArrowLeft, ShieldCheck, FileText, Info } from "lucide-react";
 import { notFound, permanentRedirect } from "next/navigation";
 
 interface LegalContent {
@@ -71,6 +71,42 @@ const legalDocs: Record<string, LegalContent> = {
       },
     ],
   },
+  disclaimer: {
+    title: "Disclaimer",
+    subtitle: "Our relationship with the brands mentioned on this website.",
+    icon: Info,
+    updatedAt: "November 2026",
+    sections: [
+      {
+        heading: "Independent service",
+        content: "Tech Flix is an independent digital service provider. We are not an official representative, partner, authorized dealer, or affiliate of any company, platform, or brand mentioned on this website, and we do not claim any official relationship, sponsorship, or endorsement.",
+      },
+      {
+        heading: "Trademarks",
+        content: "All product and service names and trademarks mentioned on this website, including CapCut, ChatGPT, Claude, Canva, Google, Microsoft 365, YouTube, Zoom, ExpressVPN, NordVPN, Netflix, Prime Video, and Crunchyroll, are the property of their respective owners. These names are used for identification purposes only, to describe which subscription or access service is offered.",
+      },
+      {
+        heading: "What we sell",
+        content: "We provide digital subscription and access services only. There are no physical products and no delivery. The subscription is activated after payment is confirmed.",
+      },
+      {
+        heading: "Service terms",
+        content: "Each service is governed by the respective platform’s own terms, policies, and privacy policy. Changes to a platform’s features, pricing, or policies are beyond our control and may affect the service.",
+      },
+      {
+        heading: "Support and warranty",
+        content: "We offer prompt support and replacement, subject to applicable terms, for the duration of the subscription. This is Tech Flix’s own service guarantee, not an official warranty from the original platform.",
+      },
+      {
+        heading: "Customer responsibility",
+        content: "Customers must follow the respective platform’s rules when using the service. We are not responsible for account restrictions caused by rule violations.",
+      },
+      {
+        heading: "Copyright and brand concerns",
+        content: "If any brand or rights holder believes their content has been used incorrectly on this site, please contact us at techflix.premium@gmail.com, and we will promptly review and take appropriate action.",
+      },
+    ],
+  },
 };
 
 export default async function LegalPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -96,7 +132,7 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
       </Link>
 
       <div className="text-center max-w-2xl mx-auto mb-10">
-        <div className="w-14 h-14 rounded-2xl bg-red-100 dark:bg-red-950 text-[var(--color-brand-red)] flex items-center justify-center mx-auto mb-3">
+        <div className="w-14 h-14 rounded-lg bg-red-100 dark:bg-red-950 text-[var(--color-brand-red)] flex items-center justify-center mx-auto mb-3">
           <IconComponent className="w-7 h-7" />
         </div>
         <h1 className="text-3xl sm:text-4xl font-black tracking-tight mb-2">
@@ -107,7 +143,7 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
         </p>
       </div>
 
-      <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+      <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-6 sm:p-8 space-y-6 shadow-sm">
         {doc.sections.map((section, idx) => (
           <div key={idx} className="space-y-2 pb-4 border-b border-[var(--card-border)] last:border-0 last:pb-0">
             <h2 className="text-lg font-bold text-[var(--color-brand-red)]">

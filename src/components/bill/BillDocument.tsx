@@ -23,7 +23,7 @@ export function BillDocument({ order }: { order: TrackedOrder }) {
     <article
       id="bill"
       aria-label={`Bill ${order.orderNumber}`}
-      className="bill-sheet relative w-full bg-white text-neutral-900 rounded-2xl shadow-2xl overflow-hidden border border-neutral-200 print:shadow-none print:border-0 print:rounded-none"
+      className="bill-sheet relative w-full bg-white text-neutral-900 rounded-lg shadow-2xl overflow-hidden border border-neutral-200 print:shadow-none print:border-0 print:rounded-none"
     >
       <div className="h-1.5 bg-[#E50914]" />
       <div className="p-6 sm:p-10 space-y-8">
@@ -118,7 +118,7 @@ export function BillDocument({ order }: { order: TrackedOrder }) {
         </div>
 
         {bill.payment && (
-          <div className="rounded-xl bg-neutral-50 border border-neutral-200 p-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+          <div className="rounded-md bg-neutral-50 border border-neutral-200 p-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
             <Cell k="Method" v={PAYMENT_NAMES[bill.payment.method]} />
             <Cell k="Transaction ID" v={bill.payment.trxId} mono />
             <Cell k="Amount" v={formatBDT(bill.payment.amount)} />

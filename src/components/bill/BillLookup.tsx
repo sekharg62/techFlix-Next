@@ -84,7 +84,7 @@ export function BillLookup() {
 
         <form
           onSubmit={submit}
-          className="p-5 sm:p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl grid grid-cols-1 sm:grid-cols-[1fr_1.4fr_auto] gap-4 items-end"
+          className="p-5 sm:p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg grid grid-cols-1 sm:grid-cols-[1fr_1.4fr_auto] gap-4 items-end"
         >
           <Field label="Order number">
             <input
@@ -107,7 +107,7 @@ export function BillLookup() {
           <button
             type="submit"
             disabled={loading}
-            className="h-[46px] px-6 rounded-2xl bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-60"
+            className="h-[46px] px-6 rounded-lg bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-60"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
             Get bill
@@ -115,14 +115,14 @@ export function BillLookup() {
         </form>
 
         {error && (
-          <div role="alert" className="mt-5 flex gap-2 p-4 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-sm font-semibold text-red-700 dark:text-red-300">
+          <div role="alert" className="mt-5 flex gap-2 p-4 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-sm font-semibold text-red-700 dark:text-red-300">
             <AlertCircle className="w-5 h-5 shrink-0" />
             {error}
           </div>
         )}
       </div>
 
-      {loading && !order && <div data-print-hide className="mt-6 h-[520px] rounded-2xl bg-neutral-200 dark:bg-neutral-800 animate-pulse" />}
+      {loading && !order && <div data-print-hide className="mt-6 h-[520px] rounded-lg bg-neutral-200 dark:bg-neutral-800 animate-pulse" />}
 
       {order && (
         <section className="mt-8 print:mt-0">
@@ -131,7 +131,7 @@ export function BillLookup() {
             <div className="flex flex-wrap gap-2">
               <Link
                 href={`/orders?${new URLSearchParams({ orderNumber: order.orderNumber, email: urlEmail })}`}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-[var(--card-border)] font-bold text-sm hover:border-[var(--color-brand-red)]"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md border border-[var(--card-border)] font-bold text-sm hover:border-[var(--color-brand-red)]"
               >
                 <PackageSearch className="w-4 h-4" />
                 Track order
@@ -139,7 +139,7 @@ export function BillLookup() {
               <button
                 type="button"
                 onClick={() => window.print()}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-[var(--card-border)] font-bold text-sm hover:border-[var(--color-brand-red)]"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-md border border-[var(--card-border)] font-bold text-sm hover:border-[var(--color-brand-red)]"
               >
                 <Printer className="w-4 h-4" />
                 Print
@@ -147,7 +147,7 @@ export function BillLookup() {
               <DownloadBillButton
                 order={order}
                 label="Download PDF"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-bold text-sm disabled:opacity-60"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[var(--color-brand-red)] hover:bg-red-700 text-white font-bold text-sm disabled:opacity-60"
               />
             </div>
           </div>
@@ -158,7 +158,7 @@ export function BillLookup() {
       {!queryKey && recent.length > 0 && (
         <section data-print-hide className="mt-8">
           <h2 className="text-sm font-black uppercase tracking-wider text-neutral-500 mb-3">Orders placed on this device</h2>
-          <ul className="divide-y divide-[var(--card-border)] bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl overflow-hidden">
+          <ul className="divide-y divide-[var(--card-border)] bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg overflow-hidden">
             {recent.map((r) => (
               <li key={r.orderNumber}>
                 <Link

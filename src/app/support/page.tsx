@@ -13,7 +13,7 @@ export default function SupportPage() {
       </Link>
 
       <div className="text-center max-w-2xl mx-auto mb-12">
-        <div className="w-16 h-16 rounded-3xl bg-red-100 dark:bg-red-950/60 text-[var(--color-brand-red)] flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 rounded-lg bg-red-100 dark:bg-red-950/60 text-[var(--color-brand-red)] flex items-center justify-center mx-auto mb-4">
           <HelpCircle className="w-8 h-8" />
         </div>
         <h1 className="text-3xl sm:text-5xl font-black tracking-tight mb-4">
@@ -42,16 +42,16 @@ export default function SupportPage() {
         ].map((card, idx) => (
           <div
             key={idx}
-            className="p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl flex flex-col justify-between hover:shadow-lg transition-shadow"
+            className="p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg flex flex-col justify-between hover:shadow-lg transition-shadow"
           >
             <div>
-              <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-md bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
                 {card.icon}
               </div>
               <h3 className="text-lg font-bold mb-2">{card.title}</h3>
               <p className="text-sm text-neutral-500 mb-6">{card.description}</p>
             </div>
-            <button className="w-full py-2.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 hover:bg-[var(--color-brand-red)] hover:text-white text-xs font-extrabold transition-colors">
+            <button className="w-full py-2.5 rounded-md bg-neutral-100 dark:bg-neutral-800 hover:bg-[var(--color-brand-red)] hover:text-white text-xs font-extrabold transition-colors">
               {card.action}
             </button>
           </div>
@@ -59,17 +59,17 @@ export default function SupportPage() {
       </div>
 
       {/* Quick FAQ Section */}
-      <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl p-6 sm:p-8">
+      <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg p-6 sm:p-8">
         <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
           <FileText className="w-5 h-5 text-[var(--color-brand-red)]" />
           Frequently Asked Questions
         </h2>
         <div className="space-y-4 text-sm">
-          <div className="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900">
+          <div className="p-4 rounded-md bg-neutral-50 dark:bg-neutral-900">
             <h4 className="font-bold mb-1">How fast will I receive my license key/subscription?</h4>
             <p className="text-neutral-500">Deliveries are automated and sent to your email instantly after successful order processing.</p>
           </div>
-          <div className="p-4 rounded-xl bg-neutral-50 dark:bg-neutral-900">
+          <div className="p-4 rounded-md bg-neutral-50 dark:bg-neutral-900">
             <h4 className="font-bold mb-1">Are all licenses genuine and original?</h4>
             <p className="text-neutral-500">Yes, 100% of our products are official software subscriptions and verified retail keys.</p>
           </div>
